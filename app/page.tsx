@@ -2,7 +2,7 @@
 
 import WebApp from '@twa-dev/sdk'
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
+
 
 // Define the interface for user data
 interface UserData {
@@ -31,12 +31,9 @@ export default function Home() {
           <ul>
             <li>hello: {userData.username}</li>
           </ul>
-                       <Image
-                        src={sparkles}
-                        alt="sparkles"
-                        width={18}
-                        height={18}
-                    />
+        <ul>
+          <li><a href="default.asp" target="_blank"style={{ padding: '16px', backgroundColor: 'black', color: 'green' }}>This is a link</a></li>
+        </ul>
         </>
       ) : (
         <div>Loading...</div>
