@@ -23,7 +23,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="p-4";background: black;color:blue>
+    <main style={{ padding: '16px', backgroundColor: 'black', color: 'blue' }}>
       {userData ? (
         <>
           <h1 className="text-2xl font-bold mb-4">free style bot</h1>
