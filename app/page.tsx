@@ -2,7 +2,7 @@
 
 import WebApp from '@twa-dev/sdk'
 import { useEffect, useState } from 'react'
-import Image from 'next/inco'
+import Image from 'next/image'
 
 // Define the interface for user data
 interface UserData {
@@ -32,8 +32,8 @@ export default function Home() {
             <li>hello: {userData.username}</li>
           </ul>
                        <Image
-                        src={IMG_20241225_130553 (2)}
-                        alt="IMG_20241225_130553 (2)"
+                        src={sparkles}
+                        alt="sparkles"
                         width={18}
                         height={18}
                     />
