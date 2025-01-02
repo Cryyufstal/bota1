@@ -2,7 +2,7 @@
 
 import WebApp from "@twa-dev/sdk";
 import { useEffect, useState } from "react";
-import '/app/global.css'; // مسار ملف CSS
+import '/app/globals.css'; // مسار ملف CSS
 import type { AppProps } from 'next/app';
 
 export default function App({ Component, pageProps }: AppProps) {
