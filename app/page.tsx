@@ -46,8 +46,8 @@ export default function Home() {
           {/* إضافة الصورة */}
           <div style={{ margin: "20px 0" }}>
             <Image
-              src="/images/raff.png" // المسار النسبي للصورة
-              alt="Raff"
+              src="/images/paws.webp" // المسار النسبي للصورة
+              alt="paws"
               width={300} // عرض الصورة بالبكسل
               height={200} // ارتفاع الصورة بالبكسل
               style={{ borderRadius: "8px" }} // تصميم اختياري
