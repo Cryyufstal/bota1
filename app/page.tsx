@@ -30,7 +30,7 @@ export default function Home() {
           <ul>
             <li>hello: {userData.username}</li>
           </ul>
-          <img src="../inco/IMG_20241225_130553 (2).png" alt="User Pic" style={{ width: '150px', height: '150px', marginTop: '16px' }} />
+          <img src="/pic.PNG" alt="User Pic" style={{ width: '150px', height: '150px', marginTop: '16px' }} />
         </>
       ) : (
         <div>Loading...</div>
