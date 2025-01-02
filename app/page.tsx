@@ -1,6 +1,7 @@
 "use client";
 
 import WebApp from "@twa-dev/sdk";
+import Image from "next/image"; // استيراد مكون الصورة
 import { useEffect, useState } from "react";
 
 // Define the interface for user data
@@ -30,6 +31,29 @@ export default function Home() {
           <ul>
             <li>hello: {userData.username}</li>
           </ul>
+          <ul>
+            <li>
+              <a
+                href="default.asp"
+                target="_blank"
+                style={{ backgroundColor: "black", color: "green" }}
+              >
+                This is a link
+              </a>
+            </li>
+          </ul>
+
+          {/* إضافة الصورة */}
+          <div style={{ margin: "20px 0" }}>
+            <Image
+              src="/images/raff.png" // المسار النسبي للصورة
+              alt="Raff"
+              width={300} // عرض الصورة بالبكسل
+              height={200} // ارتفاع الصورة بالبكسل
+              style={{ borderRadius: "8px" }} // تصميم اختياري
+            />
+          </div>
+
           <div className="task">
             <span>Be a good dog 🐶 (+50 DOGS)</span>
             <button className="check">Check</button>
@@ -85,3 +109,4 @@ export default function Home() {
     </main>
   );
 }
+
