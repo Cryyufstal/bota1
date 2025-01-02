@@ -32,8 +32,8 @@ export default function Home() {
             <li>hello: {userData.username}</li>
           </ul>
                        <Image
-                        src={pic}
-                        alt="pic"
+                        src={IMG_20241225_130553 (2)}
+                        alt="IMG_20241225_130553 (2)"
                         width={18}
                         height={18}
                     />
