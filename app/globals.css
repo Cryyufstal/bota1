@@ -1,98 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@font-face {
-  font-family: 'SF Pro';
-  src: url('/fonts/SF-Pro-Display-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro';
-  src: url('/fonts/SF-Pro-Display-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro';
-  src: url('/fonts/SF-Pro-Display-Semibold.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro';
-  src: url('/fonts/SF-Pro-Display-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for Firefox */
-* {
-  scrollbar-width: none;
-}
-
-/* Hide scrollbar for IE and Edge */
-* {
-  -ms-overflow-style: none;
-}
-
+/* styles/global.css */
 body {
-  /* For smooth scrolling on iOS */
-  -webkit-overflow-scrolling: touch;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #000; /* اللون الأسود للخلفية */
+  color: #fff; /* اللون الأبيض للنص */
 }
 
-.is-hide {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+.task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1a1a1a;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
 }
 
-.is-show {
-  display: block;
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
+.task button {
+  background-color: #444;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-@keyframes shine {
-
-  0%,
-  80% {
-    transform: translateX(-100%);
-  }
-
-  100% {
-    transform: translateX(300%);
-  }
+.task button:hover {
+  background-color: #666;
 }
 
-.shine-effect {
-  position: relative;
-  overflow: hidden;
+.task button.check {
+  background-color: #0f0;
 }
 
-.shine-effect::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 30%;
-  height: 100%;
-  background: linear-gradient(to right,
-      transparent 0%,
-      rgba(0, 122, 255, 0.3) 50%,
-      transparent 100%);
-  animation: shine 7s infinite;
-  /* Total animation time: 7s (6s wait + 1s animation) */
+.task button.check:hover {
+  background-color: #0c0;
 }
+
