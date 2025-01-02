@@ -8,7 +8,7 @@ export default function Home() {
     <TabProvider>
       <main className="min-h-screen bg-black text-white">
         <CheckFootprint />
-        <TabContainer />
+         <TabContainer />
         <NavigationBar />
       </main>
     </TabProvider>
