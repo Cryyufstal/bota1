@@ -2,6 +2,14 @@
 
 import WebApp from "@twa-dev/sdk";
 import { useEffect, useState } from "react";
+// pages/_app.tsx
+import 'global.css'; // مسار ملف CSS
+import type { AppProps } from 'next/app';
+
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
+
 
 // Define the interface for user data
 interface UserData {
