@@ -30,17 +30,6 @@ export default function Home() {
           <ul>
             <li>hello: {userData.username}</li>
           </ul>
-          <ul>
-            <li>
-              <a
-                href="default.asp"
-                target="_blank"
-                style={{ backgroundColor: "black", color: "green" }}
-              >
-                This is a link
-              </a>
-            </li>
-          </ul>
           <div className="task">
             <span>Be a good dog 🐶 (+50 DOGS)</span>
             <button className="check">Check</button>
