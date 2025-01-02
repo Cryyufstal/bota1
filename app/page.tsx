@@ -3,7 +3,7 @@
 import WebApp from "@twa-dev/sdk";
 import Image from "next/image"; // استيراد مكون الصورة
 import { useEffect, useState } from "react";
-
+import { paws } from '@/images'
 // Define the interface for user data
 interface UserData {
   id: number;
@@ -45,13 +45,13 @@ export default function Home() {
 
           {/* إضافة الصورة */}
           <div style={{ margin: "20px 0" }}>
-            <Image
-              src="../images/paws.webp" // المسار النسبي للصورة
-              alt="paws"
-              width={300} // عرض الصورة بالبكسل
-              height={200} // ارتفاع الصورة بالبكسل
-              style={{ borderRadius: "8px" }} // تصميم اختياري
-            />
+         <Image
+                        src={paws}
+                        alt="Paws"
+                        width={171}
+                        height={132}
+                        className="mb-4"
+                    />
           </div>
 
           <div className="task">
