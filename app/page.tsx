@@ -46,7 +46,7 @@ export default function Home() {
           {/* إضافة الصورة */}
           <div style={{ margin: "20px 0" }}>
             <Image
-              src="/images/paws.webp" // المسار النسبي للصورة
+              src="../images/paws.webp" // المسار النسبي للصورة
               alt="paws"
               width={300} // عرض الصورة بالبكسل
               height={200} // ارتفاع الصورة بالبكسل
