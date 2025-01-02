@@ -32,8 +32,37 @@ export default function Home() {
             <li>hello: {userData.username}</li>
           </ul>
         <ul>
-          <li><a href="default.asp" target="_blank"style={{ padding: '16px', backgroundColor: 'black', color: 'green' }}>This is a link</a></li>
+          <li><a href="default.asp" target="_blank"style={{ backgroundColor: 'black', color: 'green' }}>This is a link</a></li>
         </ul>
+                <div class="task">
+            <span>Be a good dog 🐶 (+50 DOGS)</span>
+            <button class="check">Check</button>
+        </div>
+        <div class="task">
+            <span>Subscribe to DOGS channel (+100 DOGS)</span>
+            <button onclick="window.open('https://t.me/dogs_channel', '_blank')">Start</button>
+        </div>
+        <div class="task">
+            <span>Subscribe to Dogs X.com (+1000 DOGS)</span>
+            <button onclick="window.open('https://www.dogsx.com', '_blank')">Start</button>
+        </div>
+        <div class="task">
+            <span>Invite 5 friends to DOGS (+20000 DOGS)</span>
+            <button class="check">Check</button>
+        </div>
+        <div class="task">
+            <span>Send 🦴 to Binance X.com (+100 DOGS)</span>
+            <button onclick="window.open('https://www.binance.com', '_blank')">Start</button>
+        </div>
+        <div class="task">
+            <span>Send 🦴 to OKX X.com (+100 DOGS)</span>
+            <button onclick="window.open('https://www.okx.com', '_blank')">Start</button>
+        </div>
+        <div class="task">
+            <span>Send 🦴 to Bybit X.com (+100 DOGS)</span>
+            <button onclick="window.open('https://www.bybit.com', '_blank')">Start</button>
+        </div>
+    </div>
         </>
       ) : (
         <div>Loading...</div>
