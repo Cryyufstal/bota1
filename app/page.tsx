@@ -2,6 +2,7 @@
 
 import WebApp from '@twa-dev/sdk'
 import { useEffect, useState } from 'react'
+import Image from 'next/inco'
 
 // Define the interface for user data
 interface UserData {
@@ -30,7 +31,12 @@ export default function Home() {
           <ul>
             <li>hello: {userData.username}</li>
           </ul>
-          <img src="pic.PNG" alt="User Pic" style={{ width: '150px', height: '150px', marginTop: '16px' }} />
+                       <Image
+                        src={pic}
+                        alt="pic"
+                        width={18}
+                        height={18}
+                    />
         </>
       ) : (
         <div>Loading...</div>
