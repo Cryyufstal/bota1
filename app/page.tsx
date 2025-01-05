@@ -20,13 +20,13 @@ type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [tasks, setTasks] = useState({
-    task1: { completed: false, label: "Be a good dog 🐶 (+10 points)" },
-    task2: { completed: false, label: "Subscribe to DOGS channel (+10 points)" },
-    task3: { completed: false, label: "Subscribe to Dogs X.com (+10 points)" },
-    task4: { completed: false, label: "Invite 5 friends to DOGS (+10 points)" },
-    task5: { completed: false, label: "Send 🦴 to Binance X.com (+10 points)" },
-    task6: { completed: false, label: "Send 🦴 to OKX X.com (+10 points)" },
-    task7: { completed: false, label: "Send 🦴 to Bybit X.com (+10 points)" },
+    task1: { completed: false, label: "Be a good dog 🐶 (+10 points)", url: "" },
+    task2: { completed: false, label: "Subscribe to DOGS channel (+10 points)", url: "https://t.me/dogs_channel" },
+    task3: { completed: false, label: "Subscribe to Dogs X.com (+10 points)", url: "https://www.dogsx.com" },
+    task4: { completed: false, label: "Invite 5 friends to DOGS (+10 points)", url: "" },
+    task5: { completed: false, label: "Send 🦴 to Binance X.com (+10 points)", url: "https://www.binance.com" },
+    task6: { completed: false, label: "Send 🦴 to OKX X.com (+10 points)", url: "https://www.okx.com" },
+    task7: { completed: false, label: "Send 🦴 to Bybit X.com (+10 points)", url: "https://www.bybit.com" },
   });
   const [points, setPoints] = useState(0);
 
@@ -44,6 +44,19 @@ export default function Home() {
       return updatedTasks;
     });
     setPoints((prevPoints) => prevPoints + 10); // Add 10 points
+  };
+
+  // Handle task start action, open link and change button text
+  const startTask = (taskKey: TaskKey) => {
+    const task = tasks[taskKey];
+    if (task.url) {
+      window.open(task.url, "_blank"); // Open the link
+      // Change the task to "Check" after opening the link
+      setTasks((prevTasks) => ({
+        ...prevTasks,
+        [taskKey]: { ...prevTasks[taskKey], completed: false }, // Update task status
+      }));
+    }
   };
 
   return (
@@ -73,7 +86,11 @@ export default function Home() {
           {Object.entries(tasks).map(([key, task]) => (
             <div className="task" key={key} style={{ marginBottom: "10px" }}>
               <span>{task.label}</span>
-              <button onClick={() => completeTask(key as TaskKey)}>Check</button>
+              {task.completed ? (
+                <button onClick={() => completeTask(key as TaskKey)}>Check</button>
+              ) : (
+                <button onClick={() => startTask(key as TaskKey)}>Start</button>
+              )}
             </div>
           ))}
         </>
@@ -83,3 +100,4 @@ export default function Home() {
     </main>
   );
 }
+
