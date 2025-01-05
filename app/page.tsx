@@ -14,6 +14,9 @@ interface UserData {
   is_premium?: boolean;
 }
 
+// Define type for task keys
+type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task7";
+
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [tasks, setTasks] = useState({
@@ -33,7 +36,7 @@ export default function Home() {
   }, []);
 
   // Toggle task state
-  const toggleTask = (taskKey: string) => {
+  const toggleTask = (taskKey: TaskKey) => {
     setTasks((prevTasks) => ({
       ...prevTasks,
       [taskKey]: !prevTasks[taskKey],
@@ -61,10 +64,10 @@ export default function Home() {
           {Object.keys(tasks).map((taskKey, index) => (
             <div className="task" key={index}>
               <span>Task {index + 1}</span>
-              {tasks[taskKey] ? (
-                <button onClick={() => toggleTask(taskKey)}>Check</button>
+              {tasks[taskKey as TaskKey] ? (
+                <button onClick={() => toggleTask(taskKey as TaskKey)}>Check</button>
               ) : (
-                <button onClick={() => toggleTask(taskKey)}>Start</button>
+                <button onClick={() => toggleTask(taskKey as TaskKey)}>Start</button>
               )}
             </div>
           ))}
