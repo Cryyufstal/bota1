@@ -14,12 +14,32 @@ interface UserData {
   is_premium?: boolean;
 }
 
-// Define type for task keys
+// Define the interface for a single task
+interface Task {
+  label: string;
+  url: string;
+  completed: boolean;
+}
+
+// Define the type for all tasks
+type Tasks = {
+  [key in TaskKey]: Task;
+};
+
+// Define task keys
 type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task7";
 
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [tasks, setTasks] = useState<any>({});
+  const [tasks, setTasks] = useState<Tasks>({
+    task1: { label: "Be a good dog 🐶 (+50 DOGS)", url: "https://example.com/task1", completed: false },
+    task2: { label: "Subscribe to DOGS channel (+100 DOGS)", url: "https://t.me/dogs_channel", completed: false },
+    task3: { label: "Subscribe to Dogs X.com (+1000 DOGS)", url: "https://www.dogsx.com", completed: false },
+    task4: { label: "Invite 5 friends to DOGS (+20000 DOGS)", url: "https://example.com/task4", completed: false },
+    task5: { label: "Send 🦴 to Binance X.com (+100 DOGS)", url: "https://www.binance.com", completed: false },
+    task6: { label: "Send 🦴 to OKX X.com (+100 DOGS)", url: "https://www.okx.com", completed: false },
+    task7: { label: "Send 🦴 to Bybit X.com (+100 DOGS)", url: "https://www.bybit.com", completed: false },
+  });
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
@@ -68,7 +88,6 @@ export default function Home() {
     const task = tasks[taskKey];
     if (task.url) {
       window.open(task.url, "_blank"); // Open the link
-      // Change the task to completed after opening the link
       setTasks((prevTasks) => ({
         ...prevTasks,
         [taskKey]: { ...prevTasks[taskKey], completed: true }, // Mark task as completed
