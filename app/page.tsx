@@ -23,6 +23,25 @@ export default function Home() {
       setUserData(WebApp.initDataUnsafe.user as UserData);
     }
   }, []);
+export default function Main({ userData, paws }) {
+  // حالة لتعقب كل زر
+  const [tasks, setTasks] = useState({
+    task1: false,
+    task2: false,
+    task3: false,
+    task4: false,
+    task5: false,
+    task6: false,
+    task7: false,
+  });
+
+  // تغيير حالة الزر
+  const toggleTask = (taskKey) => {
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [taskKey]: !prevTasks[taskKey],
+    }));
+  };
 
   return (
     <main style={{ padding: "16px", backgroundColor: "black", color: "blue" }}>
@@ -44,64 +63,106 @@ export default function Home() {
             </li>
           </ul>
 
-          {/* إضافة الصورة */}
           <div style={{ margin: "20px 0" }}>
-         <Image
-                        src={paws}
-                        alt="Paws"
-                        width={171}
-                        height={132}
-                        className="mb-4"
-                    />
+            <Image
+              src={paws}
+              alt="Paws"
+              width={171}
+              height={132}
+              className="mb-4"
+            />
           </div>
 
           <div className="task">
             <span>Be a good dog 🐶 (+50 DOGS)</span>
-            <button className="check">Check</button>
+            {tasks.task1 ? (
+              <button onClick={() => toggleTask("task1")}>Check</button>
+            ) : (
+              <button onClick={() => toggleTask("task1")}>Start</button>
+            )}
           </div>
           <div className="task">
             <span>Subscribe to DOGS channel (+100 DOGS)</span>
-            <button
-              onClick={() => window.open("https://t.me/dogs_channel", "_blank")}
-            >
-              Start
-            </button>
+            {tasks.task2 ? (
+              <button onClick={() => toggleTask("task2")}>Check</button>
+            ) : (
+              <button
+                onClick={() => {
+                  window.open("https://t.me/dogs_channel", "_blank");
+                  toggleTask("task2");
+                }}
+              >
+                Start
+              </button>
+            )}
           </div>
           <div className="task">
             <span>Subscribe to Dogs X.com (+1000 DOGS)</span>
-            <button
-              onClick={() => window.open("https://www.dogsx.com", "_blank")}
-            >
-              Start
-            </button>
+            {tasks.task3 ? (
+              <button onClick={() => toggleTask("task3")}>Check</button>
+            ) : (
+              <button
+                onClick={() => {
+                  window.open("https://www.dogsx.com", "_blank");
+                  toggleTask("task3");
+                }}
+              >
+                Start
+              </button>
+            )}
           </div>
           <div className="task">
             <span>Invite 5 friends to DOGS (+20000 DOGS)</span>
-            <button className="check">Check</button>
+            {tasks.task4 ? (
+              <button onClick={() => toggleTask("task4")}>Check</button>
+            ) : (
+              <button onClick={() => toggleTask("task4")}>Start</button>
+            )}
           </div>
           <div className="task">
             <span>Send 🦴 to Binance X.com (+100 DOGS)</span>
-            <button
-              onClick={() => window.open("https://www.binance.com", "_blank")}
-            >
-              Start
-            </button>
+            {tasks.task5 ? (
+              <button onClick={() => toggleTask("task5")}>Check</button>
+            ) : (
+              <button
+                onClick={() => {
+                  window.open("https://www.binance.com", "_blank");
+                  toggleTask("task5");
+                }}
+              >
+                Start
+              </button>
+            )}
           </div>
           <div className="task">
             <span>Send 🦴 to OKX X.com (+100 DOGS)</span>
-            <button
-              onClick={() => window.open("https://www.okx.com", "_blank")}
-            >
-              Start
-            </button>
+            {tasks.task6 ? (
+              <button onClick={() => toggleTask("task6")}>Check</button>
+            ) : (
+              <button
+                onClick={() => {
+                  window.open("https://www.okx.com", "_blank");
+                  toggleTask("task6");
+                }}
+              >
+                Start
+              </button>
+            )}
           </div>
           <div className="task">
             <span>Send 🦴 to Bybit X.com (+100 DOGS)</span>
-            <button
-              onClick={() => window.open("https://www.bybit.com", "_blank")}
-            >
-              Start
-            </button>
+            {tasks.task7 ? (
+              <button onClick={() => toggleTask("task7")}>Check</button>
+            ) : (
+              <button
+                onClick={() => {
+                  window.open("https://www.bybit.com", "_blank");
+                  toggleTask("task7");
+                }}
+              >
+                Start
+              </button>
+            )}
           </div>
         </>
       ) : (
@@ -110,3 +171,4 @@ export default function Home() {
     </main>
   );
 }
+
