@@ -51,10 +51,10 @@ export default function Home() {
     const task = tasks[taskKey];
     if (task.url) {
       window.open(task.url, "_blank"); // Open the link
-      // Change the task to "Check" after opening the link
+      // Change the task to completed after opening the link
       setTasks((prevTasks) => ({
         ...prevTasks,
-        [taskKey]: { ...prevTasks[taskKey], completed: false }, // Update task status
+        [taskKey]: { ...prevTasks[taskKey], completed: true }, // Mark task as completed
       }));
     }
   };
