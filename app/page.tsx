@@ -20,14 +20,15 @@ type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [tasks, setTasks] = useState({
-    task1: false,
-    task2: false,
-    task3: false,
-    task4: false,
-    task5: false,
-    task6: false,
-    task7: false,
+    task1: { completed: false, label: "Be a good dog 🐶 (+10 points)" },
+    task2: { completed: false, label: "Subscribe to DOGS channel (+10 points)" },
+    task3: { completed: false, label: "Subscribe to Dogs X.com (+10 points)" },
+    task4: { completed: false, label: "Invite 5 friends to DOGS (+10 points)" },
+    task5: { completed: false, label: "Send 🦴 to Binance X.com (+10 points)" },
+    task6: { completed: false, label: "Send 🦴 to OKX X.com (+10 points)" },
+    task7: { completed: false, label: "Send 🦴 to Bybit X.com (+10 points)" },
   });
+  const [points, setPoints] = useState(0);
 
   useEffect(() => {
     if (WebApp.initDataUnsafe?.user) {
@@ -35,12 +36,14 @@ export default function Home() {
     }
   }, []);
 
-  // Toggle task state
-  const toggleTask = (taskKey: TaskKey) => {
-    setTasks((prevTasks) => ({
-      ...prevTasks,
-      [taskKey]: !prevTasks[taskKey],
-    }));
+  // Mark task as completed and add points
+  const completeTask = (taskKey: TaskKey) => {
+    setTasks((prevTasks) => {
+      const updatedTasks = { ...prevTasks };
+      delete updatedTasks[taskKey]; // Remove the completed task
+      return updatedTasks;
+    });
+    setPoints((prevPoints) => prevPoints + 10); // Add 10 points
   };
 
   return (
@@ -61,14 +64,16 @@ export default function Home() {
             />
           </div>
 
-          {Object.keys(tasks).map((taskKey, index) => (
-            <div className="task" key={index}>
-              <span>Task {index + 1}</span>
-              {tasks[taskKey as TaskKey] ? (
-                <button onClick={() => toggleTask(taskKey as TaskKey)}>Check</button>
-              ) : (
-                <button onClick={() => toggleTask(taskKey as TaskKey)}>Start</button>
-              )}
+          {/* Display points */}
+          <div style={{ margin: "10px 0", fontSize: "18px", fontWeight: "bold" }}>
+            Points: {points}
+          </div>
+
+          {/* Render tasks */}
+          {Object.entries(tasks).map(([key, task]) => (
+            <div className="task" key={key} style={{ marginBottom: "10px" }}>
+              <span>{task.label}</span>
+              <button onClick={() => completeTask(key as TaskKey)}>Check</button>
             </div>
           ))}
         </>
