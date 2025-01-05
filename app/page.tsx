@@ -19,20 +19,31 @@ type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task
 
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [tasks, setTasks] = useState({
-    task1: { completed: false, label: "Be a good dog 🐶 (+10 points)", url: "" },
-    task2: { completed: false, label: "Subscribe to DOGS channel (+10 points)", url: "https://t.me/dogs_channel" },
-    task3: { completed: false, label: "Subscribe to Dogs X.com (+10 points)", url: "https://www.dogsx.com" },
-    task4: { completed: false, label: "Invite 5 friends to DOGS (+10 points)", url: "" },
-    task5: { completed: false, label: "Send 🦴 to Binance X.com (+10 points)", url: "https://www.binance.com" },
-    task6: { completed: false, label: "Send 🦴 to OKX X.com (+10 points)", url: "https://www.okx.com" },
-    task7: { completed: false, label: "Send 🦴 to Bybit X.com (+10 points)", url: "https://www.bybit.com" },
-  });
+  const [tasks, setTasks] = useState<any>({});
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
+    // Retrieve data from localStorage
+    const storedUserData = localStorage.getItem("userData");
+    const storedPoints = localStorage.getItem("points");
+    const storedTasks = localStorage.getItem("tasks");
+
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    }
+
+    if (storedPoints) {
+      setPoints(Number(storedPoints));
+    }
+
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks)); // Set tasks from localStorage
+    }
+
     if (WebApp.initDataUnsafe?.user) {
-      setUserData(WebApp.initDataUnsafe.user as UserData);
+      const user = WebApp.initDataUnsafe.user as UserData;
+      setUserData(user);
+      localStorage.setItem("userData", JSON.stringify(user)); // Store user data in localStorage
     }
   }, []);
 
@@ -40,10 +51,16 @@ export default function Home() {
   const completeTask = (taskKey: TaskKey) => {
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
-      delete updatedTasks[taskKey]; // Remove the completed task
+      updatedTasks[taskKey] = { ...updatedTasks[taskKey], completed: true }; // Mark task as completed
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // Store tasks in localStorage
       return updatedTasks;
     });
-    setPoints((prevPoints) => prevPoints + 10); // Add 10 points
+
+    setPoints((prevPoints) => {
+      const newPoints = prevPoints + 10; // Add 10 points
+      localStorage.setItem("points", newPoints.toString()); // Store points in localStorage
+      return newPoints;
+    });
   };
 
   // Handle task start action, open link and change button text
@@ -100,4 +117,3 @@ export default function Home() {
     </main>
   );
 }
-
