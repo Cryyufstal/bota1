@@ -1,54 +1,50 @@
 "use client";
 
 import { useState } from "react";
-
-interface UserData {
-  id: number;
-  username: string;
-  points: number;
-}
-
-type TaskKey = "task1" | "task2"; // حدد مفاتيح المهام الممكنة
+import Home from "@/components/Home";
+import Tasks from "@/components/Tasks";
+import Referrals from "@/components/Referrals";
 
 export default function Page() {
-  const [userData, setUserData] = useState<UserData>({
-    id: 1,
-    username: "User",
-    points: 0,
-  });
+  const [currentPage, setCurrentPage] = useState<"home" | "tasks" | "referrals">("home");
 
-  const [tasks, setTasks] = useState<Record<TaskKey, boolean>>({
-    task1: false,
-    task2: false,
-  });
-
-  const toggleTask = (taskKey: TaskKey) => {
-    setTasks((prev) => ({ ...prev, [taskKey]: !prev[taskKey] }));
-    if (!tasks[taskKey]) {
-      // Add points only if the task was not previously completed
-      setUserData((prev) => ({ ...prev, points: prev.points + 10 }));
+  // لتغيير الصفحة
+  const renderPage = () => {
+    switch (currentPage) {
+      case "home":
+        return <Home />;
+      case "tasks":
+        return <Tasks />;
+      case "referrals":
+        return <Referrals />;
+      default:
+        return <Home />;
     }
   };
 
   return (
-    <main style={{ padding: "16px" }}>
-      <h1>Welcome, {userData.username}</h1>
-      <p>Points: {userData.points}</p>
-      <div>
-        <h2>Tasks</h2>
-        <div>
-          <span>Task 1</span>
-          <button onClick={() => toggleTask("task1")}>
-            {tasks.task1 ? "Completed" : "Start"}
-          </button>
-        </div>
-        <div>
-          <span>Task 2</span>
-          <button onClick={() => toggleTask("task2")}>
-            {tasks.task2 ? "Completed" : "Start"}
-          </button>
-        </div>
-      </div>
-    </main>
+    <div>
+      {/* الصفحة الرئيسية */}
+      <div>{renderPage()}</div>
+
+      {/* شريط التنقل */}
+      <nav
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "#f8f9fa",
+          display: "flex",
+          justifyContent: "space-around",
+          padding: "10px 0",
+          borderTop: "1px solid #ddd",
+        }}
+      >
+        <button onClick={() => setCurrentPage("home")}>Home</button>
+        <button onClick={() => setCurrentPage("tasks")}>Tasks</button>
+        <button onClick={() => setCurrentPage("referrals")}>Referrals</button>
+      </nav>
+    </div>
   );
 }
