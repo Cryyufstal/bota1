@@ -42,6 +42,7 @@ export default function Home() {
     task7: { label: "Send 🦴 to Bybit X.com (+100 DOGS)", url: "https://www.bybit.com", started: false, completed: false },
   });
   const [points, setPoints] = useState(0);
+  const [copied, setCopied] = useState(false); // State for showing the "Copied" alert
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -111,6 +112,16 @@ export default function Home() {
     });
   };
 
+  const copyReferralLink = () => {
+    if (userData) {
+      const referralLink = `https://t.me/monton_bot/ref${userData.id}`;
+      navigator.clipboard.writeText(referralLink).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Hide alert after 2 seconds
+      });
+    }
+  };
+
   const activeTasks = Object.entries(tasks).filter(([_, task]) => !task.completed);
 
   return (
@@ -136,6 +147,14 @@ export default function Home() {
             Points: {points}
           </div>
 
+          {/* Invite friends button */}
+          <div style={{ margin: "10px 0" }}>
+            <button onClick={copyReferralLink} style={{ backgroundColor: "green", color: "white", padding: "10px" }}>
+              Invite Friends
+            </button>
+          </div>
+          {copied && <div style={{ color: "lime", marginTop: "5px" }}>Copied</div>}
+
           {/* Render active tasks */}
           {activeTasks.length > 0 ? (
             activeTasks.map(([key, task]) => (
@@ -158,4 +177,3 @@ export default function Home() {
     </main>
   );
 }
-
