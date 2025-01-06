@@ -5,6 +5,12 @@ import Home from ".//components/Home";
 import Tasks from ".//components/Tasks";
 import Referrals from ".//components/Referrals";
 
+// بيانات المستخدم
+const userData = {
+  username: "JohnDoe",
+  points: 100,
+};
+
 export default function Page() {
   const [currentPage, setCurrentPage] = useState<"home" | "tasks" | "referrals">("home");
 
@@ -12,13 +18,13 @@ export default function Page() {
   const renderPage = () => {
     switch (currentPage) {
       case "home":
-        return <Home />;
+        return <Home userData={userData} />;
       case "tasks":
-        return <Tasks />;
+        return <Tasks userData={userData} />;
       case "referrals":
-        return <Referrals />;
+        return <Referrals userData={userData} />;
       default:
-        return <Home />;
+        return <Home userData={userData} />;
     }
   };
 
