@@ -109,7 +109,7 @@ export default function Home() {
 
   const copyReferralLink = () => {
     if (userData) {
-      const referralLink = `https://t.me/monton_bot/ref${userData.id}`;
+      const referralLink = `https://t.me/motmoonbot/notmoon${userData.id}`;
       navigator.clipboard.writeText(referralLink).then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
