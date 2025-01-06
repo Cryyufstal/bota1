@@ -43,57 +43,68 @@ export default function Home() {
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
-    // Retrieve data from localStorage
     const storedUserData = localStorage.getItem("userData");
-    const storedPoints = localStorage.getItem("points");
-    const storedTasks = localStorage.getItem("tasks");
+    const storedUserTasks = userData
+      ? localStorage.getItem(`${userData.username}_tasks`)
+      : null;
+    const storedUserPoints = userData
+      ? localStorage.getItem(`${userData.username}_points`)
+      : null;
 
     if (storedUserData) {
       setUserData(JSON.parse(storedUserData));
     }
 
-    if (storedPoints) {
-      setPoints(Number(storedPoints));
+    if (storedUserTasks) {
+      setTasks(JSON.parse(storedUserTasks));
     }
 
-    if (storedTasks) {
-      setTasks(JSON.parse(storedTasks)); // Set tasks from localStorage
+    if (storedUserPoints) {
+      setPoints(Number(storedUserPoints));
     }
 
     if (WebApp.initDataUnsafe?.user) {
       const user = WebApp.initDataUnsafe.user as UserData;
       setUserData(user);
-      localStorage.setItem("userData", JSON.stringify(user)); // Store user data in localStorage
+      localStorage.setItem("userData", JSON.stringify(user));
     }
-  }, []);
+  }, [userData]);
 
-  // Mark task as completed and add points
+  const saveUserTasks = (updatedTasks: Tasks) => {
+    if (userData) {
+      localStorage.setItem(`${userData.username}_tasks`, JSON.stringify(updatedTasks));
+    }
+  };
+
+  const saveUserPoints = (newPoints: number) => {
+    if (userData) {
+      localStorage.setItem(`${userData.username}_points`, newPoints.toString());
+    }
+  };
+
   const completeTask = (taskKey: TaskKey) => {
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
-      updatedTasks[taskKey] = { ...updatedTasks[taskKey], completed: true }; // Mark task as completed
-      localStorage.setItem("tasks", JSON.stringify(updatedTasks)); // Store tasks in localStorage
+      updatedTasks[taskKey] = { ...updatedTasks[taskKey], completed: true };
+      saveUserTasks(updatedTasks);
       return updatedTasks;
     });
 
     setPoints((prevPoints) => {
-      const newPoints = prevPoints + 10; // Add 10 points
-      localStorage.setItem("points", newPoints.toString()); // Store points in localStorage
+      const newPoints = prevPoints + 10;
+      saveUserPoints(newPoints);
       return newPoints;
     });
   };
 
-  // Handle task start action, open link and change button text
   const startTask = (taskKey: TaskKey) => {
     const task = tasks[taskKey];
     if (task.url) {
-      window.open(task.url, "_blank"); // Open the link
-      setTasks((prevTasks) => ({
-        ...prevTasks,
-        [taskKey]: { ...prevTasks[taskKey], completed: true }, // Mark task as completed
-      }));
+      window.open(task.url, "_blank");
     }
   };
+
+  const activeTasks = Object.entries(tasks).filter(([_, task]) => !task.completed);
 
   return (
     <main style={{ padding: "16px", backgroundColor: "black", color: "blue" }}>
@@ -118,17 +129,19 @@ export default function Home() {
             Points: {points}
           </div>
 
-          {/* Render tasks */}
-          {Object.entries(tasks).map(([key, task]) => (
-            <div className="task" key={key} style={{ marginBottom: "10px" }}>
-              <span>{task.label}</span>
-              {task.completed ? (
-                <button onClick={() => completeTask(key as TaskKey)}>Check</button>
-              ) : (
-                <button onClick={() => startTask(key as TaskKey)}>Start</button>
-              )}
-            </div>
-          ))}
+          {/* Render active tasks */}
+          {activeTasks.length > 0 ? (
+            activeTasks.map(([key, task]) => (
+              <div className="task" key={key} style={{ marginBottom: "10px" }}>
+                <span>{task.label}</span>
+                <button onClick={() => completeTask(key as TaskKey)}>
+                  {task.completed ? "Completed" : "Start"}
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>All tasks completed!</p>
+          )}
         </>
       ) : (
         <div>Loading...</div>
@@ -136,3 +149,4 @@ export default function Home() {
     </main>
   );
 }
+
