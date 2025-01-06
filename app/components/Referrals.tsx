@@ -1,16 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface ReferralsProps {
-  userId: number;
+  userData: {
+    username: string;
+    points: number;
+  };
 }
 
-const Referrals: React.FC<ReferralsProps> = ({ userId }) => {
+export default function Referrals({ userData }: ReferralsProps) {
   const [copied, setCopied] = useState(false);
-  const referralLink = `https://t.me/motmoonbot?start=notmoon${userId}`;
 
   const copyReferralLink = () => {
+    const referralLink = `https://t.me/motmoonbot?start=notmoon${userData.username}`;
     navigator.clipboard.writeText(referralLink).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -19,15 +22,17 @@ const Referrals: React.FC<ReferralsProps> = ({ userId }) => {
 
   return (
     <div style={{ padding: "16px" }}>
-      <h2>Referral Program</h2>
-      <p>Share your referral link:</p>
-      <div>
-        <input type="text" value={referralLink} readOnly style={{ width: "100%" }} />
-        <button onClick={copyReferralLink}>Copy</button>
-      </div>
-      {copied && <p style={{ color: "green" }}>Copied!</p>}
+      <h1>Referrals</h1>
+      <p>Your referral link:</p>
+      <input
+        type="text"
+        value={`https://t.me/motmoonbot?start=notmoon${userData.username}`}
+        readOnly
+        style={{ width: "100%", marginBottom: "10px" }}
+      />
+      <button onClick={copyReferralLink}>
+        {copied ? "Copied!" : "Copy Referral Link"}
+      </button>
     </div>
   );
-};
-
-export default Referrals;
+}
