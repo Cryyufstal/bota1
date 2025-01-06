@@ -18,6 +18,7 @@ interface UserData {
 interface Task {
   label: string;
   url: string;
+  started: boolean;
   completed: boolean;
 }
 
@@ -32,13 +33,13 @@ type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [tasks, setTasks] = useState<Tasks>({
-    task1: { label: "Be a good dog 🐶 (+50 DOGS)", url: "https://example.com/task1", completed: false },
-    task2: { label: "Subscribe to DOGS channel (+100 DOGS)", url: "https://t.me/dogs_channel", completed: false },
-    task3: { label: "Subscribe to Dogs X.com (+1000 DOGS)", url: "https://www.dogsx.com", completed: false },
-    task4: { label: "Invite 5 friends to DOGS (+20000 DOGS)", url: "https://example.com/task4", completed: false },
-    task5: { label: "Send 🦴 to Binance X.com (+100 DOGS)", url: "https://www.binance.com", completed: false },
-    task6: { label: "Send 🦴 to OKX X.com (+100 DOGS)", url: "https://www.okx.com", completed: false },
-    task7: { label: "Send 🦴 to Bybit X.com (+100 DOGS)", url: "https://www.bybit.com", completed: false },
+    task1: { label: "Be a good dog 🐶 (+50 DOGS)", url: "https://example.com/task1", started: false, completed: false },
+    task2: { label: "Subscribe to DOGS channel (+100 DOGS)", url: "https://t.me/dogs_channel", started: false, completed: false },
+    task3: { label: "Subscribe to Dogs X.com (+1000 DOGS)", url: "https://www.dogsx.com", started: false, completed: false },
+    task4: { label: "Invite 5 friends to DOGS (+20000 DOGS)", url: "https://example.com/task4", started: false, completed: false },
+    task5: { label: "Send 🦴 to Binance X.com (+100 DOGS)", url: "https://www.binance.com", started: false, completed: false },
+    task6: { label: "Send 🦴 to OKX X.com (+100 DOGS)", url: "https://www.okx.com", started: false, completed: false },
+    task7: { label: "Send 🦴 to Bybit X.com (+100 DOGS)", url: "https://www.bybit.com", started: false, completed: false },
   });
   const [points, setPoints] = useState(0);
 
@@ -82,6 +83,19 @@ export default function Home() {
     }
   };
 
+  const startTask = (taskKey: TaskKey) => {
+    const task = tasks[taskKey];
+    if (task.url) {
+      window.open(task.url, "_blank");
+    }
+    setTasks((prevTasks) => {
+      const updatedTasks = { ...prevTasks };
+      updatedTasks[taskKey] = { ...updatedTasks[taskKey], started: true };
+      saveUserTasks(updatedTasks);
+      return updatedTasks;
+    });
+  };
+
   const completeTask = (taskKey: TaskKey) => {
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
@@ -95,13 +109,6 @@ export default function Home() {
       saveUserPoints(newPoints);
       return newPoints;
     });
-  };
-
-  const startTask = (taskKey: TaskKey) => {
-    const task = tasks[taskKey];
-    if (task.url) {
-      window.open(task.url, "_blank");
-    }
   };
 
   const activeTasks = Object.entries(tasks).filter(([_, task]) => !task.completed);
@@ -134,9 +141,11 @@ export default function Home() {
             activeTasks.map(([key, task]) => (
               <div className="task" key={key} style={{ marginBottom: "10px" }}>
                 <span>{task.label}</span>
-                <button onClick={() => completeTask(key as TaskKey)}>
-                  {task.completed ? "Completed" : "Start"}
-                </button>
+                {task.started ? (
+                  <button onClick={() => completeTask(key as TaskKey)}>Check</button>
+                ) : (
+                  <button onClick={() => startTask(key as TaskKey)}>Start</button>
+                )}
               </div>
             ))
           ) : (
