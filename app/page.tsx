@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Home from "./components/Home";
-import Tasks from "./components/Tasks";
-import Referrals from "./components/Referrals";
+import Home from ".//components/Home";
+import Tasks from ".//components/Tasks";
+import Referrals from ".//components/Referrals";
 
 export default function Page() {
   const [currentPage, setCurrentPage] = useState<"home" | "tasks" | "referrals">("home");
