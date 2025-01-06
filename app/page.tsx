@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Home from ".//components/Home";
-import Tasks from ".//components/Tasks";
-import Referrals from ".//components/Referrals";
+import Home from "@/components/Home";
+import Tasks from "@/components/Tasks";
+import Referrals from "@/components/Referrals";
 
 const userData = {
   username: "JohnDoe",
@@ -51,12 +51,6 @@ export default function Page() {
           <span>🔗</span>
           <div>Referrals</div>
         </button>
-      </nav>
-    </div>
-  );
-}
-
-        <button onClick={() => setCurrentPage("referrals")}>Referrals</button>
       </nav>
     </div>
   );
