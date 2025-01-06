@@ -1,18 +1,18 @@
 "use client";
 
-import React from "react";
-
 interface HomeProps {
-  userData: { username: string; points: number };
+  userData: {
+    username: string;
+    points: number;
+  };
 }
 
-const Home: React.FC<HomeProps> = ({ userData }) => {
+export default function Home({ userData }: HomeProps) {
   return (
     <div style={{ padding: "16px" }}>
-      <h1>Welcome, {userData.username}!</h1>
-      <p>You have {userData.points} points.</p>
+      <h1>Welcome, {userData.username}</h1>
+      <p>Points: {userData.points}</p>
     </div>
   );
-};
+}
 
-export default Home;
