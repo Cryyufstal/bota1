@@ -1,15 +1,6 @@
-"use client";
-
 import { useState } from "react";
 
-interface ReferralsProps {
-  userData: {
-    username: string;
-    points: number;
-  };
-}
-
-export default function Referrals({ userData }: ReferralsProps) {
+export default function Referrals({ userData }: { userData: { username: string; points: number } }) {
   const [copied, setCopied] = useState(false);
 
   const copyReferralLink = () => {
@@ -21,18 +12,23 @@ export default function Referrals({ userData }: ReferralsProps) {
   };
 
   return (
-    <div style={{ padding: "16px" }}>
-      <h1>Referrals</h1>
-      <p>Your referral link:</p>
-      <input
-        type="text"
-        value={`https://t.me/motmoonbot?start=notmoon${userData.username}`}
-        readOnly
-        style={{ width: "100%", marginBottom: "10px" }}
-      />
-      <button onClick={copyReferralLink}>
-        {copied ? "Copied!" : "Copy Referral Link"}
-      </button>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold text-gray-800 mb-4">Referrals</h1>
+      <p className="text-gray-600 mb-2">Share your referral link:</p>
+      <div className="flex items-center space-x-2">
+        <input
+          type="text"
+          value={`https://t.me/motmoonbot?start=notmoon${userData.username}`}
+          readOnly
+          className="flex-grow border border-gray-300 rounded p-2"
+        />
+        <button
+          className={`px-4 py-2 rounded text-white ${copied ? "bg-green-500" : "bg-blue-500"}`}
+          onClick={copyReferralLink}
+        >
+          {copied ? "Copied!" : "Copy"}
+        </button>
+      </div>
     </div>
   );
 }
