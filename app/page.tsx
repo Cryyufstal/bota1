@@ -1,51 +1,54 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Home from "./components/Home";
-import Tasks from "./components/Tasks";
-import Referrals from "./components/Referrals";
+import { useState } from "react";
 
+interface UserData {
+  id: number;
+  username: string;
+  points: number;
+}
+
+type TaskKey = "task1" | "task2"; // حدد مفاتيح المهام الممكنة
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState("home");
-  const [userData, setUserData] = useState({ username: "User", points: 0 });
-  const [tasks, setTasks] = useState({
+  const [userData, setUserData] = useState<UserData>({
+    id: 1,
+    username: "User",
+    points: 0,
+  });
+
+  const [tasks, setTasks] = useState<Record<TaskKey, boolean>>({
     task1: false,
     task2: false,
   });
 
-  useEffect(() => {
-    // Example user data initialization
-    const storedUserData = JSON.parse(localStorage.getItem("userData") || "{}");
-    const storedTasks = JSON.parse(localStorage.getItem("tasks") || "{}");
-    if (storedUserData.username) setUserData(storedUserData);
-    if (storedTasks) setTasks(storedTasks);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("userData", JSON.stringify(userData));
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [userData, tasks]);
-
-  const toggleTask = (taskKey: string) => {
+  const toggleTask = (taskKey: TaskKey) => {
     setTasks((prev) => ({ ...prev, [taskKey]: !prev[taskKey] }));
     if (!tasks[taskKey]) {
+      // Add points only if the task was not previously completed
       setUserData((prev) => ({ ...prev, points: prev.points + 10 }));
     }
   };
 
   return (
-    <div>
-      <nav style={{ display: "flex", justifyContent: "space-around", padding: "8px", background: "#eee" }}>
-        <button onClick={() => setActiveTab("home")}>Home</button>
-        <button onClick={() => setActiveTab("tasks")}>Tasks</button>
-        <button onClick={() => setActiveTab("referrals")}>Referrals</button>
-      </nav>
-      <div style={{ padding: "16px" }}>
-        {activeTab === "home" && <Home userData={userData} />}
-        {activeTab === "tasks" && <Tasks tasks={tasks} toggleTask={toggleTask} />}
-        {activeTab === "referrals" && <Referrals userId={12345} />}
+    <main style={{ padding: "16px" }}>
+      <h1>Welcome, {userData.username}</h1>
+      <p>Points: {userData.points}</p>
+      <div>
+        <h2>Tasks</h2>
+        <div>
+          <span>Task 1</span>
+          <button onClick={() => toggleTask("task1")}>
+            {tasks.task1 ? "Completed" : "Start"}
+          </button>
+        </div>
+        <div>
+          <span>Task 2</span>
+          <button onClick={() => toggleTask("task2")}>
+            {tasks.task2 ? "Completed" : "Start"}
+          </button>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
