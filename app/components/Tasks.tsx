@@ -1,13 +1,19 @@
 import { useState } from "react";
 
+// تحديد نوع البيانات المستخدمة للمستخدم
+type UserData = {
+  username: string;
+  points: number;
+};
+
 type TaskKey = "task1" | "task2";  // تحديد المفاتيح المسموح بها في tasks
 
 export default function Tasks({
   userData,
   setUserData,
 }: {
-  userData: { username: string; points: number };
-  setUserData: React.Dispatch<React.SetStateAction<any>>;
+  userData: UserData;
+  setUserData: React.Dispatch<React.SetStateAction<UserData>>; // تحديد نوع setUserData
 }) {
   const [tasks, setTasks] = useState({
     task1: { completed: false, points: 50 },
@@ -22,7 +28,7 @@ export default function Tasks({
       // إضافة النقاط عند إتمام المهمة
       setUserData((prevData) => ({
         ...prevData,
-        points: prevData.points + updatedTasks[taskKey].points,
+        points: prevData.points + updatedTasks[taskKey].points, // تحديث النقاط
       }));
 
       // تخزين المهمة في الذاكرة المحلية
