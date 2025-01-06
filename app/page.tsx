@@ -14,7 +14,7 @@ interface UserData {
   is_premium?: boolean;
 }
 
-// Define the interface for a single task
+// Define the interface for tasks
 interface Task {
   label: string;
   url: string;
@@ -22,17 +22,13 @@ interface Task {
   completed: boolean;
 }
 
-// Define the type for all tasks
-type Tasks = {
-  [key in TaskKey]: Task;
-};
-
-// Define task keys
+// Type for task keys
 type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task7";
 
+// Define the main component
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [tasks, setTasks] = useState<Tasks>({
+  const [tasks, setTasks] = useState<Record<TaskKey, Task>>({
     task1: { label: "Be a good dog 🐶 (+50 DOGS)", url: "https://example.com/task1", started: false, completed: false },
     task2: { label: "Subscribe to DOGS channel (+100 DOGS)", url: "https://t.me/dogs_channel", started: false, completed: false },
     task3: { label: "Subscribe to Dogs X.com (+1000 DOGS)", url: "https://www.dogsx.com", started: false, completed: false },
@@ -42,7 +38,7 @@ export default function Home() {
     task7: { label: "Send 🦴 to Bybit X.com (+100 DOGS)", url: "https://www.bybit.com", started: false, completed: false },
   });
   const [points, setPoints] = useState(0);
-  const [copied, setCopied] = useState(false); // State for showing the "Copied" alert
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -70,9 +66,17 @@ export default function Home() {
       setUserData(user);
       localStorage.setItem("userData", JSON.stringify(user));
     }
+
+    // Check for referral ID in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const referrerId = urlParams.get("ref");
+
+    if (referrerId && userData?.id) {
+      handleReferral(referrerId);
+    }
   }, [userData]);
 
-  const saveUserTasks = (updatedTasks: Tasks) => {
+  const saveUserTasks = (updatedTasks: Record<TaskKey, Task>) => {
     if (userData) {
       localStorage.setItem(`${userData.username}_tasks`, JSON.stringify(updatedTasks));
     }
@@ -84,32 +88,23 @@ export default function Home() {
     }
   };
 
-  const startTask = (taskKey: TaskKey) => {
-    const task = tasks[taskKey];
-    if (task.url) {
-      window.open(task.url, "_blank");
+  const handleReferral = (referrerId: string) => {
+    // Get the list of referred users from localStorage
+    const referredUsers = JSON.parse(localStorage.getItem("referredUsers") || "{}");
+
+    // Check if the current user is already referred by this referrer
+    if (!referredUsers[referrerId]?.includes(userData!.id)) {
+      // Add the current user to the referrer's list
+      if (!referredUsers[referrerId]) {
+        referredUsers[referrerId] = [];
+      }
+      referredUsers[referrerId].push(userData!.id);
+      localStorage.setItem("referredUsers", JSON.stringify(referredUsers));
+
+      // Add 10 points to the referrer
+      const referrerPoints = parseInt(localStorage.getItem(`${referrerId}_points`) || "0", 10);
+      localStorage.setItem(`${referrerId}_points`, (referrerPoints + 10).toString());
     }
-    setTasks((prevTasks) => {
-      const updatedTasks = { ...prevTasks };
-      updatedTasks[taskKey] = { ...updatedTasks[taskKey], started: true };
-      saveUserTasks(updatedTasks);
-      return updatedTasks;
-    });
-  };
-
-  const completeTask = (taskKey: TaskKey) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = { ...prevTasks };
-      updatedTasks[taskKey] = { ...updatedTasks[taskKey], completed: true };
-      saveUserTasks(updatedTasks);
-      return updatedTasks;
-    });
-
-    setPoints((prevPoints) => {
-      const newPoints = prevPoints + 10;
-      saveUserPoints(newPoints);
-      return newPoints;
-    });
   };
 
   const copyReferralLink = () => {
@@ -117,7 +112,7 @@ export default function Home() {
       const referralLink = `https://t.me/monton_bot/ref${userData.id}`;
       navigator.clipboard.writeText(referralLink).then(() => {
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Hide alert after 2 seconds
+        setTimeout(() => setCopied(false), 2000);
       });
     }
   };
@@ -142,12 +137,10 @@ export default function Home() {
             />
           </div>
 
-          {/* Display points */}
           <div style={{ margin: "10px 0", fontSize: "18px", fontWeight: "bold" }}>
             Points: {points}
           </div>
 
-          {/* Invite friends button */}
           <div style={{ margin: "10px 0" }}>
             <button onClick={copyReferralLink} style={{ backgroundColor: "green", color: "white", padding: "10px" }}>
               Invite Friends
@@ -155,21 +148,16 @@ export default function Home() {
           </div>
           {copied && <div style={{ color: "lime", marginTop: "5px" }}>Copied</div>}
 
-          {/* Render active tasks */}
-          {activeTasks.length > 0 ? (
-            activeTasks.map(([key, task]) => (
-              <div className="task" key={key} style={{ marginBottom: "10px" }}>
-                <span>{task.label}</span>
-                {task.started ? (
-                  <button onClick={() => completeTask(key as TaskKey)}>Check</button>
-                ) : (
-                  <button onClick={() => startTask(key as TaskKey)}>Start</button>
-                )}
-              </div>
-            ))
-          ) : (
-            <p>All tasks completed!</p>
-          )}
+          {activeTasks.map(([key, task]) => (
+            <div className="task" key={key} style={{ marginBottom: "10px" }}>
+              <span>{task.label}</span>
+              {task.started ? (
+                <button>Check</button>
+              ) : (
+                <button>Start</button>
+              )}
+            </div>
+          ))}
         </>
       ) : (
         <div>Loading...</div>
