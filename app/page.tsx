@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Home from "@/components/Home";
-import Tasks from "@/components/Tasks";
-import Referrals from "@/components/Referrals";
+import Home from "./components/Home";
+import Tasks from "./components/Tasks";
+import Referrals from "./components/Referrals";
+
 
 export default function Page() {
   const [activeTab, setActiveTab] = useState("home");
