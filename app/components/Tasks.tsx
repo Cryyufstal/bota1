@@ -1,16 +1,24 @@
 import { useState } from "react";
 
-export default function Tasks({ userData, setUserData }: { userData: { username: string; points: number }; setUserData: React.Dispatch<React.SetStateAction<any>> }) {
+type TaskKey = "task1" | "task2";  // تحديد المفاتيح المسموح بها في tasks
+
+export default function Tasks({
+  userData,
+  setUserData,
+}: {
+  userData: { username: string; points: number };
+  setUserData: React.Dispatch<React.SetStateAction<any>>;
+}) {
   const [tasks, setTasks] = useState({
     task1: { completed: false, points: 50 },
     task2: { completed: false, points: 100 },
   });
 
-  const toggleTask = (taskKey: string) => {
+  const toggleTask = (taskKey: TaskKey) => {
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
       updatedTasks[taskKey].completed = true;
-      
+
       // إضافة النقاط عند إتمام المهمة
       setUserData((prevData) => ({
         ...prevData,
@@ -24,7 +32,7 @@ export default function Tasks({ userData, setUserData }: { userData: { username:
     });
   };
 
-  const handleTaskClick = (taskKey: string) => {
+  const handleTaskClick = (taskKey: TaskKey) => {
     // عند الضغط على المهمة، نقوم بنقل المستخدم إلى الرابط الخاص بالمهمة
     if (!tasks[taskKey].completed) {
       let url = "";
