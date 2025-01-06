@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Home from ".//components/Home";
-import Tasks from ".//components/Tasks";
-import Referrals from ".//components/Referrals";
+import Home from "@/components/Home";
+import Tasks from "@/components/Tasks";
+import Referrals from "@/components/Referrals";
 
-// بيانات المستخدم
 const userData = {
   username: "JohnDoe",
   points: 100,
@@ -14,7 +13,6 @@ const userData = {
 export default function Page() {
   const [currentPage, setCurrentPage] = useState<"home" | "tasks" | "referrals">("home");
 
-  // لتغيير الصفحة
   const renderPage = () => {
     switch (currentPage) {
       case "home":
@@ -29,26 +27,35 @@ export default function Page() {
   };
 
   return (
-    <div>
-      {/* الصفحة الرئيسية */}
-      <div>{renderPage()}</div>
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-grow">{renderPage()}</div>
+      <nav className="fixed bottom-0 left-0 right-0 bg-gray-800 text-white flex justify-around py-3">
+        <button
+          className={`text-center ${currentPage === "home" ? "font-bold text-blue-400" : ""}`}
+          onClick={() => setCurrentPage("home")}
+        >
+          <span>🏠</span>
+          <div>Home</div>
+        </button>
+        <button
+          className={`text-center ${currentPage === "tasks" ? "font-bold text-blue-400" : ""}`}
+          onClick={() => setCurrentPage("tasks")}
+        >
+          <span>📋</span>
+          <div>Tasks</div>
+        </button>
+        <button
+          className={`text-center ${currentPage === "referrals" ? "font-bold text-blue-400" : ""}`}
+          onClick={() => setCurrentPage("referrals")}
+        >
+          <span>🔗</span>
+          <div>Referrals</div>
+        </button>
+      </nav>
+    </div>
+  );
+}
 
-      {/* شريط التنقل */}
-      <nav
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: "#f8f9fa",
-          display: "flex",
-          justifyContent: "space-around",
-          padding: "10px 0",
-          borderTop: "1px solid #ddd",
-        }}
-      >
-        <button onClick={() => setCurrentPage("home")}>Home</button>
-        <button onClick={() => setCurrentPage("tasks")}>Tasks</button>
         <button onClick={() => setCurrentPage("referrals")}>Referrals</button>
       </nav>
     </div>
