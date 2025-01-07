@@ -115,8 +115,24 @@ export default function Home() {
     <main style={{ padding: "16px", backgroundColor: "black", color: "blue" }}>
       {userData ? (
         <>
-
+ <h1 className="text-2xl font-bold mb-4">Free Style Bot</h1>
+          <ul>
+            <li>Hello: {userData.username}</li>
+          </ul>
+          <div style={{ margin: "20px 0" }}>
+            <Image
+              src="/images/paws.png"
+              alt="Paws"
+              width={171}
+              height={132}
+              className="mb-4"
+            />
           {activeTasks.map(([key, task]) => (
+            <div className="task" key={key} style={{ marginBottom: "10px" }}>
+              <span>{task.label}</span>
+              {task.started ? (
+                <button>Check</button>
+              {activeTasks.map(([key, task]) => (
             <div className="task" key={key} style={{ marginBottom: "10px" }}>
               <span>{task.label}</span>
               {task.started ? (
@@ -133,4 +149,3 @@ export default function Home() {
     </main>
   );
 }
-
