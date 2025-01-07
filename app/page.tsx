@@ -1,50 +1,77 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import Home from "./components/Home";
-import Tasks from "./components/Tasks";
-import Referrals from "./components/Referrals";
 
-type UserData = {
-  username: string;
+type Task = {
+  completed: boolean;
   points: number;
 };
 
-export default function Page() {
-  // تحميل بيانات المستخدم من Local Storage أو توفير البيانات الافتراضية
-  const [userData, setUserData] = useState<UserData>(() => {
-    const storedUserData = localStorage.getItem("userData");
-    return storedUserData
-      ? JSON.parse(storedUserData)
-      : { username: "User", points: 0 };
+type TasksProps = {
+  userData: {
+    username: string;
+    points: number;
+  };
+  setUserData: React.Dispatch<
+    React.SetStateAction<{
+      username: string;
+      points: number;
+    }>
+  >;
+};
+
+export default function Tasks({ userData, setUserData }: TasksProps) {
+  const [tasks, setTasks] = useState<{ [key: string]: Task }>({
+    task1: { completed: false, points: 10 },
+    task2: { completed: false, points: 20 },
   });
 
-  // حفظ بيانات المستخدم عند تغييرها
+  // تحميل البيانات من Local Storage عند أول تشغيل
   useEffect(() => {
-    localStorage.setItem("userData", JSON.stringify(userData));
-  }, [userData]);
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
 
-  const [currentPage, setCurrentPage] = useState<string>("home");
+  // حفظ البيانات عند تغيير المهام
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const toggleTask = (taskKey: string) => {
+    setTasks((prevTasks) => {
+      const updatedTasks = { ...prevTasks };
+      updatedTasks[taskKey].completed = true;
+
+      // إضافة النقاط عند إتمام المهمة
+      setUserData((prevData) => ({
+        ...prevData,
+        points: prevData.points + updatedTasks[taskKey].points,
+      }));
+
+      return updatedTasks;
+    });
+  };
 
   return (
     <div>
-      {/* شريط التنقل */}
-      <nav style={{ display: "flex", justifyContent: "space-around", padding: "10px", borderTop: "1px solid #ccc" }}>
-        <button onClick={() => setCurrentPage("home")}>Home</button>
-        <button onClick={() => setCurrentPage("tasks")}>Tasks</button>
-        <button onClick={() => setCurrentPage("referrals")}>Referrals</button>
-      </nav>
-
-      {/* عرض الصفحة الحالية بناءً على currentPage */}
-      <div style={{ padding: "20px" }}>
-        {currentPage === "home" && <Home userData={userData} />}
-        {currentPage === "tasks" && (
-          <Tasks userData={userData} setUserData={setUserData} />
-        )}
-        {currentPage === "referrals" && (
-          <Referrals userData={userData} />
-        )}
-      </div>
+      <h1>Tasks</h1>
+      <ul>
+        {Object.entries(tasks).map(([key, task]) => (
+          !task.completed && (
+            <li key={key}>
+              Task: {key}, Points: {task.points}
+              <button
+                onClick={() => toggleTask(key)}
+                style={{ marginLeft: "10px" }}
+              >
+                Complete Task
+              </button>
+            </li>
+          )
+        ))}
+      </ul>
     </div>
   );
 }
