@@ -3,9 +3,8 @@
 import WebApp from "@twa-dev/sdk";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import paws from '@/images/paws.webp';
+import paws from '..//images/paws.webp';
 
-// Define the interface for user data
 interface UserData {
   id: number;
   first_name: string;
@@ -15,7 +14,6 @@ interface UserData {
   is_premium?: boolean;
 }
 
-// Define the interface for tasks
 interface Task {
   label: string;
   url: string;
@@ -23,10 +21,8 @@ interface Task {
   completed: boolean;
 }
 
-// Type for task keys
-type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task7"| "task8" | "task9";
+type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task7" | "task8" | "task9";
 
-// Define the main component
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [tasks, setTasks] = useState<Record<TaskKey, Task>>({
@@ -70,7 +66,6 @@ export default function Home() {
       localStorage.setItem("userData", JSON.stringify(user));
     }
 
-    // Check for referral ID in the URL
     const urlParams = new URLSearchParams(window.location.search);
     const referrerId = urlParams.get("ref");
 
@@ -92,19 +87,15 @@ export default function Home() {
   };
 
   const handleReferral = (referrerId: string) => {
-    // Get the list of referred users from localStorage
     const referredUsers = JSON.parse(localStorage.getItem("referredUsers") || "{}");
 
-    // Check if the current user is already referred by this referrer
     if (!referredUsers[referrerId]?.includes(userData!.id)) {
-      // Add the current user to the referrer's list
       if (!referredUsers[referrerId]) {
         referredUsers[referrerId] = [];
       }
       referredUsers[referrerId].push(userData!.id);
       localStorage.setItem("referredUsers", JSON.stringify(referredUsers));
 
-      // Add 10 points to the referrer
       const referrerPoints = parseInt(localStorage.getItem(`${referrerId}_points`) || "0", 10);
       localStorage.setItem(`${referrerId}_points`, (referrerPoints + 10).toString());
     }
@@ -123,14 +114,11 @@ export default function Home() {
   const activeTasks = Object.entries(tasks).filter(([_, task]) => !task.completed);
 
   return (
-    <main style={{ padding: "16px", backgroundColor: "black", color: "blue" }}>
+    <main style={{ padding: "20px", backgroundColor: "#1f1f1f", color: "#fff", fontFamily: "Arial, sans-serif", minHeight: "100vh" }}>
       {userData ? (
         <>
-          <h1 className="text-2xl font-bold mb-4">Free Style Bot</h1>
-          <ul>
-            <li>Hello: {userData.username}</li>
-          </ul>
-          <div style={{ padding: "20px", backgroundColor: "#333",color: "#201090",borderRadius: "8px",boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",fontFamily: "Arial, sans-serif" }}>
+          <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "20px" }}>Welcome, {userData.username}</h1>
+          <div style={{ padding: "20px", backgroundColor: "#333", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
             <Image
               src="/images/paws.png"
               alt="Paws"
@@ -140,25 +128,36 @@ export default function Home() {
             />
           </div>
 
-          <div style={{ padding: "20px",backgroundColor: "#333",color: "#fff",borderRadius: "8px",boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",fontFamily: "Arial, sans-serif" }}>
-            Points: {points}
+          <div style={{ padding: "20px", backgroundColor: "#444", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
+            <span style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Points: {points}</span>
           </div>
 
           <div style={{ margin: "10px 0" }}>
-            <button onClick={copyReferralLink} style={{ backgroundColor: "green", color: "white", padding: "10px" }}>
+            <button
+              onClick={copyReferralLink}
+              style={{ backgroundColor: "#4CAF50", color: "white", padding: "12px 24px", borderRadius: "4px", border: "none", fontSize: "1rem" }}
+            >
               Invite Friends
             </button>
           </div>
           {copied && <div style={{ color: "lime", marginTop: "5px" }}>Copied</div>}
 
           {activeTasks.map(([key, task]) => (
-            <div className="task" key={key} style={{ marginBottom: "10px" }}>
+            <div key={key} style={{ marginBottom: "15px", padding: "12px", backgroundColor: "#555", borderRadius: "6px" }}>
               <span>{task.label}</span>
-              {task.started ? (
-                <button>Check</button>
-              ) : (
-                <button>Start</button>
-              )}
+              <button
+                onClick={() => task.started ? alert('Task Completed') : alert('Start Task')}
+                style={{
+                  marginLeft: "10px",
+                  padding: "8px 16px",
+                  backgroundColor: task.started ? "#007BFF" : "#FFA500",
+                  color: "white",
+                  borderRadius: "4px",
+                  border: "none"
+                }}
+              >
+                {task.started ? "Check" : "Start"}
+              </button>
             </div>
           ))}
         </>
