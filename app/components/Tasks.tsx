@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from "react";
 
 type UserData = {
@@ -60,9 +61,9 @@ export default function Tasks({
   };
 
   return (
-    <div>
+    <div className="tasks-container">
       <h2>Tasks</h2>
-      <div>
+      <div className="task">
         <h3>Task 1: Be a good dog 🐶 (+50 DOGS)</h3>
         <button
           onClick={() => handleTaskClick("task1")}
@@ -71,7 +72,7 @@ export default function Tasks({
           {tasks.task1.completed ? "Check" : "Start"}
         </button>
       </div>
-      <div>
+      <div className="task">
         <h3>Task 2: Subscribe to DOGS channel (+100 DOGS)</h3>
         <button
           onClick={() => handleTaskClick("task2")}
