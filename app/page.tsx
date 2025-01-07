@@ -1,6 +1,6 @@
-'use client'; // تأكد من إضافة هذه السطر
+'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Home from "./components/Home";
 import Tasks from "./components/Tasks";
 import Referrals from "./components/Referrals";
@@ -11,12 +11,20 @@ type UserData = {
 };
 
 export default function Page() {
-  const [userData, setUserData] = useState<UserData>({
-    username: "User",
-    points: 0,
+  const [userData, setUserData] = useState<UserData>(() => {
+    // استرجاع بيانات المستخدم من Local Storage
+    const storedUserData = localStorage.getItem("userData");
+    return storedUserData
+      ? JSON.parse(storedUserData)
+      : { username: "User", points: 0 };
   });
 
   const [currentPage, setCurrentPage] = useState<string>("home");
+
+  // تحديث Local Storage عند تغيير بيانات المستخدم
+  useEffect(() => {
+    localStorage.setItem("userData", JSON.stringify(userData));
+  }, [userData]);
 
   return (
     <div className="container">
@@ -28,7 +36,9 @@ export default function Page() {
 
       <div className="content">
         {currentPage === "home" && <Home userData={userData} />}
-        {currentPage === "tasks" && <Tasks userData={userData} setUserData={setUserData} />}
+        {currentPage === "tasks" && (
+          <Tasks userData={userData} setUserData={setUserData} />
+        )}
         {currentPage === "referrals" && <Referrals userData={userData} />}
       </div>
 
@@ -38,3 +48,4 @@ export default function Page() {
     </div>
   );
 }
+
