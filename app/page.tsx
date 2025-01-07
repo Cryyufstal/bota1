@@ -1,3 +1,4 @@
+// page.tsx
 'use client';
 
 import WebApp from "@twa-dev/sdk";
@@ -6,7 +7,7 @@ import ProfilePage from "./ProfilePage";
 import TasksPage from "./TasksPage";
 import ReferralPage from "./ReferralPage";
 import BottomNavigation from "./BottomNavigation";
-import { UserData, Task, TaskKey } from "./types";
+import { UserData, Task, TaskKey } from "./types"; // تأكد من المسار الصحيح
 
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
