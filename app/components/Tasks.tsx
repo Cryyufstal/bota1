@@ -26,17 +26,20 @@ export default function Tasks({ userData, setUserData }: TasksProps) {
     task2: { completed: false, points: 20 },
   });
 
-  // تحميل البيانات من Local Storage عند أول تشغيل
   useEffect(() => {
-    const storedTasks = localStorage.getItem("tasks");
-    if (storedTasks) {
-      setTasks(JSON.parse(storedTasks));
+    // التحقق من وجود localStorage
+    if (typeof window !== "undefined") {
+      const storedTasks = localStorage.getItem("tasks");
+      if (storedTasks) {
+        setTasks(JSON.parse(storedTasks));
+      }
     }
   }, []);
 
-  // حفظ البيانات عند تغيير المهام
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
   }, [tasks]);
 
   const toggleTask = (taskKey: string) => {
@@ -44,7 +47,6 @@ export default function Tasks({ userData, setUserData }: TasksProps) {
       const updatedTasks = { ...prevTasks };
       updatedTasks[taskKey].completed = true;
 
-      // إضافة النقاط عند إتمام المهمة
       setUserData((prevData) => ({
         ...prevData,
         points: prevData.points + updatedTasks[taskKey].points,
