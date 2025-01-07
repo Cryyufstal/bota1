@@ -3,6 +3,7 @@
 import WebApp from "@twa-dev/sdk";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import paws from '../images/paws.webp';
 
 // Define the interface for user data
 interface UserData {
