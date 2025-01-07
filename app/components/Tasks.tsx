@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type UserData = {
   username: string;
@@ -16,24 +16,36 @@ export default function Tasks({
   userData: UserData;
   setUserData: React.Dispatch<React.SetStateAction<UserData>>;
 }) {
-  const [tasks, setTasks] = useState({
-    task1: { completed: false, points: 50 },
-    task2: { completed: false, points: 100 },
+  const [tasks, setTasks] = useState(() => {
+    // استرجاع المهام من Local Storage
+    const storedTasks = localStorage.getItem("tasks");
+    return storedTasks
+      ? JSON.parse(storedTasks)
+      : {
+          task1: { completed: false, points: 50 },
+          task2: { completed: false, points: 100 },
+        };
   });
+
+  // تحديث Local Storage عند تغيير حالة المهام
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const toggleTask = (taskKey: TaskKey) => {
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
       updatedTasks[taskKey].completed = true;
 
-      // إضافة النقاط عند إتمام المهمة
-      setUserData((prevData) => ({
-        ...prevData,
-        points: prevData.points + updatedTasks[taskKey].points,
-      }));
-
-      // تخزين المهمة في الذاكرة المحلية
-      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+      // إضافة النقاط إلى المستخدم
+      setUserData((prevData) => {
+        const newData = {
+          ...prevData,
+          points: prevData.points + updatedTasks[taskKey].points,
+        };
+        localStorage.setItem("userData", JSON.stringify(newData)); // تخزين النقاط
+        return newData;
+      });
 
       return updatedTasks;
     });
@@ -64,22 +76,30 @@ export default function Tasks({
     <div className="tasks-container">
       <h2>Tasks</h2>
       <div className="task">
-        <h3>Task 1: Be a good dog 🐶 (+50 DOGS)</h3>
-        <button
-          onClick={() => handleTaskClick("task1")}
-          disabled={tasks.task1.completed}
-        >
-          {tasks.task1.completed ? "Check" : "Start"}
-        </button>
+        {!tasks.task1.completed && (
+          <>
+            <h3>Task 1: Be a good dog 🐶 (+50 DOGS)</h3>
+            <button
+              onClick={() => handleTaskClick("task1")}
+              disabled={tasks.task1.completed}
+            >
+              {tasks.task1.completed ? "Check" : "Start"}
+            </button>
+          </>
+        )}
       </div>
       <div className="task">
-        <h3>Task 2: Subscribe to DOGS channel (+100 DOGS)</h3>
-        <button
-          onClick={() => handleTaskClick("task2")}
-          disabled={tasks.task2.completed}
-        >
-          {tasks.task2.completed ? "Check" : "Start"}
-        </button>
+        {!tasks.task2.completed && (
+          <>
+            <h3>Task 2: Subscribe to DOGS channel (+100 DOGS)</h3>
+            <button
+              onClick={() => handleTaskClick("task2")}
+              disabled={tasks.task2.completed}
+            >
+              {tasks.task2.completed ? "Check" : "Start"}
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
