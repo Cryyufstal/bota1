@@ -125,13 +125,20 @@ export default function Home() {
        width={171}
        height={132}
 />
-          </div>
+    </div>
 
           <div style={{ padding: "20px", backgroundColor: "#444", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
             <span style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Points: {points}</span>
           </div>
 
-
+          <div style={{ margin: "10px 0" }}>
+            <button
+              onClick={copyReferralLink}
+              style={{ backgroundColor: "#4CAF50", color: "white", padding: "12px 24px", borderRadius: "4px", border: "none", fontSize: "1rem" }}
+            >
+              Invite Friends
+            </button>
+          </div>
           {copied && <div style={{ color: "lime", marginTop: "5px" }}>Copied</div>}
 
           {activeTasks.map(([key, task]) => (
@@ -150,15 +157,6 @@ export default function Home() {
               >
                 {task.started ? "Check" : "Start"}
               </button>
-                          
-          </div>
-                                  <div style={{ margin: "10px 0" }}>
-            <button
-              onClick={copyReferralLink}
-              style={{ backgroundColor: "#4CAF50", color: "white", padding: "12px 24px", borderRadius: "4px", border: "none", fontSize: "1rem" }}
-            >
-              Invite Friends
-            </button>
             </div>
           ))}
         </>
