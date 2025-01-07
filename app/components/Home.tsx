@@ -1,5 +1,7 @@
 "use client";
+import Image from 'next/image';  // إضافة هذه السطر لاستيراد مكون Image
 import paws from '../../images/paws.webp';
+
 interface HomeProps {
   userData: {
     id: number;
@@ -23,5 +25,6 @@ export default function Home({ userData }: HomeProps) {
     </div>
   );
 }
+
 
 
