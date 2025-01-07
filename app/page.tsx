@@ -1,12 +1,8 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import NavigationBar from "./components/NavigationBar";
-import Home from "./components/Home";
-import Tasks from "./components/Tasks";
-import Referrals from "./components/Referrals";
 import WebApp from "@twa-dev/sdk";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 // Define the interface for user data
 interface UserData {
@@ -116,9 +112,25 @@ export default function Home() {
   const activeTasks = Object.entries(tasks).filter(([_, task]) => !task.completed);
 
   return (
-    <div className="flex flex-col min-h-screen bg-black text-white">
-      <div className="flex-grow">{renderPage()}</div>
-      <NavigationBar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-    </div>
+    <main style={{ padding: "16px", backgroundColor: "black", color: "blue" }}>
+      {userData ? (
+        <>
+
+          {activeTasks.map(([key, task]) => (
+            <div className="task" key={key} style={{ marginBottom: "10px" }}>
+              <span>{task.label}</span>
+              {task.started ? (
+                <button>Check</button>
+              ) : (
+                <button>Start</button>
+              )}
+            </div>
+          ))}
+        </>
+      ) : (
+        <div>Loading...</div>
+      )}
+    </main>
   );
 }
+
