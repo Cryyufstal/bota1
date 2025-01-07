@@ -119,12 +119,12 @@ export default function Home() {
         <>
           <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "20px" }}>Welcome, {userData.username}</h1>
           <div style={{ padding: "20px", backgroundColor: "#333", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
-             <Image
-          src="/images/paws.png"
-          alt="Paws"
-          width={171}
-          height={132}
-        />
+       <Image
+       src={paws}
+       alt="Paws"
+       width={171}
+       height={132}
+/>
           </div>
 
           <div style={{ padding: "20px", backgroundColor: "#444", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
