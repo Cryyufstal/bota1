@@ -2,105 +2,76 @@
 
 import { useState, useEffect } from "react";
 
-type UserData = {
-  username: string;
+type Task = {
+  completed: boolean;
   points: number;
 };
 
-type TaskKey = "task1" | "task2";
+type TasksProps = {
+  userData: {
+    username: string;
+    points: number;
+  };
+  setUserData: React.Dispatch<
+    React.SetStateAction<{
+      username: string;
+      points: number;
+    }>
+  >;
+};
 
-export default function Tasks({
-  userData,
-  setUserData,
-}: {
-  userData: UserData;
-  setUserData: React.Dispatch<React.SetStateAction<UserData>>;
-}) {
-  const [tasks, setTasks] = useState(() => {
-    // استرجاع المهام من Local Storage
-    const storedTasks = localStorage.getItem("tasks");
-    return storedTasks
-      ? JSON.parse(storedTasks)
-      : {
-          task1: { completed: false, points: 50 },
-          task2: { completed: false, points: 100 },
-        };
+export default function Tasks({ userData, setUserData }: TasksProps) {
+  const [tasks, setTasks] = useState<{ [key: string]: Task }>({
+    task1: { completed: false, points: 10 },
+    task2: { completed: false, points: 20 },
   });
 
-  // تحديث Local Storage عند تغيير حالة المهام
+  // تحميل البيانات من Local Storage عند أول تشغيل
+  useEffect(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+
+  // حفظ البيانات عند تغيير المهام
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  const toggleTask = (taskKey: TaskKey) => {
+  const toggleTask = (taskKey: string) => {
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
       updatedTasks[taskKey].completed = true;
 
-      // إضافة النقاط إلى المستخدم
-      setUserData((prevData) => {
-        const newData = {
-          ...prevData,
-          points: prevData.points + updatedTasks[taskKey].points,
-        };
-        localStorage.setItem("userData", JSON.stringify(newData)); // تخزين النقاط
-        return newData;
-      });
+      // إضافة النقاط عند إتمام المهمة
+      setUserData((prevData) => ({
+        ...prevData,
+        points: prevData.points + updatedTasks[taskKey].points,
+      }));
 
       return updatedTasks;
     });
   };
 
-  const handleTaskClick = (taskKey: TaskKey) => {
-    if (!tasks[taskKey].completed) {
-      let url = "";
-      switch (taskKey) {
-        case "task1":
-          url = "https://example.com/task1";
-          break;
-        case "task2":
-          url = "https://example.com/task2";
-          break;
-        default:
-          break;
-      }
-
-      if (url) {
-        window.open(url, "_blank");
-        toggleTask(taskKey); // اكمل المهمة
-      }
-    }
-  };
-
   return (
-    <div className="tasks-container">
-      <h2>Tasks</h2>
-      <div className="task">
-        {!tasks.task1.completed && (
-          <>
-            <h3>Task 1: Be a good dog 🐶 (+50 DOGS)</h3>
-            <button
-              onClick={() => handleTaskClick("task1")}
-              disabled={tasks.task1.completed}
-            >
-              {tasks.task1.completed ? "Check" : "Start"}
-            </button>
-          </>
-        )}
-      </div>
-      <div className="task">
-        {!tasks.task2.completed && (
-          <>
-            <h3>Task 2: Subscribe to DOGS channel (+100 DOGS)</h3>
-            <button
-              onClick={() => handleTaskClick("task2")}
-              disabled={tasks.task2.completed}
-            >
-              {tasks.task2.completed ? "Check" : "Start"}
-            </button>
-          </>
-        )}
-      </div>
+    <div>
+      <h1>Tasks</h1>
+      <ul>
+        {Object.entries(tasks).map(([key, task]) => (
+          !task.completed && (
+            <li key={key}>
+              Task: {key}, Points: {task.points}
+              <button
+                onClick={() => toggleTask(key)}
+                style={{ marginLeft: "10px" }}
+              >
+                Complete Task
+              </button>
+            </li>
+          )
+        ))}
+      </ul>
     </div>
   );
 }
