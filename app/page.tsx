@@ -30,13 +30,15 @@ type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task
 export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [tasks, setTasks] = useState<Record<TaskKey, Task>>({
-    task1: { label: "Be a good dog 🐶 (+50 DOGS)", url: "https://example.com/task1", started: false, completed: false },
+    task1: { label: "Be a good mi ma moncky (+50 DOGS)", url: "https://example1.com/task1", started: false, completed: false },
     task2: { label: "Subscribe to DOGS channel (+100 DOGS)", url: "https://t.me/dogs_channel", started: false, completed: false },
     task3: { label: "Subscribe to Dogs X.com (+1000 DOGS)", url: "https://www.dogsx.com", started: false, completed: false },
     task4: { label: "Invite 5 friends to DOGS (+20000 DOGS)", url: "https://example.com/task4", started: false, completed: false },
     task5: { label: "Send 🦴 to Binance X.com (+100 DOGS)", url: "https://www.binance.com", started: false, completed: false },
     task6: { label: "Send 🦴 to OKX X.com (+100 DOGS)", url: "https://www.okx.com", started: false, completed: false },
     task7: { label: "Send 🦴 to Bybit X.com (+100 DOGS)", url: "https://www.bybit.com", started: false, completed: false },
+    task8: { label: "moy", url: "https://www.okx.com", started: false, completed: false },
+    task9: { label: "ggood", url: "https://www.bybit.com", started: false, completed: false },
   });
   const [points, setPoints] = useState(0);
   const [copied, setCopied] = useState(false);
