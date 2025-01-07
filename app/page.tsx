@@ -127,7 +127,7 @@ export default function Home() {
           <ul>
             <li>Hello: {userData.username}</li>
           </ul>
-          <div style={{ margin: "20px 0" }}>
+          <div style={{ padding: "20px", backgroundColor: "#333",color: "#201090",borderRadius: "8px",boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",fontFamily: "Arial, sans-serif" }}>
             <Image
               src="/images/paws.png"
               alt="Paws"
@@ -137,7 +137,7 @@ export default function Home() {
             />
           </div>
 
-          <div style={{ margin: "10px 0", fontSize: "18px", fontWeight: "bold" }}>
+          <div style={{ padding: "20px",backgroundColor: "#333",color: "#fff",borderRadius: "8px",boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",fontFamily: "Arial, sans-serif" }}>
             Points: {points}
           </div>
 
