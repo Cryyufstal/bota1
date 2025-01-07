@@ -150,14 +150,15 @@ export default function Home() {
               >
                 {task.started ? "Check" : "Start"}
               </button>
-                        <div style={{ margin: "10px 0" }}>
+                          
+          </div>
+                                  <div style={{ margin: "10px 0" }}>
             <button
               onClick={copyReferralLink}
               style={{ backgroundColor: "#4CAF50", color: "white", padding: "12px 24px", borderRadius: "4px", border: "none", fontSize: "1rem" }}
             >
               Invite Friends
             </button>
-          </div>
             </div>
           ))}
         </>
