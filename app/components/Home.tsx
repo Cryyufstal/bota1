@@ -1,5 +1,5 @@
 "use client";
-
+import paws from '../../images/paws.webp';
 interface HomeProps {
   userData: {
     id: number;
@@ -16,8 +16,8 @@ export default function Home({ userData }: HomeProps) {
         <p className="text-lg">
           <strong>Points:</strong> {userData.points}
         </p>
+        <Image src={paws} alt="Paws" width={500} height={500} />
         <p className="text-lg">
-          <strong>User ID:</strong> {userData.id}
         </p>
       </div>
     </div>
