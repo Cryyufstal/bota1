@@ -30,6 +30,15 @@ export default function App() {
     console.log(`Completing task ${key}`);
     // Add task complete logic here
   };
+  const handleTaskStart = (key: number | string) => {
+  console.log(`Starting task ${key}`);
+  // Add task start logic here
+};
+
+const handleTaskComplete = (key: number | string) => {
+  console.log(`Completing task ${key}`);
+  // Add task complete logic here
+};
 
   return (
     <main>
