@@ -21,15 +21,6 @@ export default function App() {
     { key: 3, label: "Send to Bybit X.com (+100 DOGS)", started: false },
   ];
 
-  const handleTaskStart = (key) => {
-    console.log(`Starting task ${key}`);
-    // Add task start logic here
-  };
-
-  const handleTaskComplete = (key) => {
-    console.log(`Completing task ${key}`);
-    // Add task complete logic here
-  };
   const handleTaskStart = (key: number | string) => {
   console.log(`Starting task ${key}`);
   // Add task start logic here
