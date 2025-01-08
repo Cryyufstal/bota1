@@ -1,76 +1,35 @@
 "use client";
 
-import WebApp from "@twa-dev/sdk";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import paws from "..//images/paws.webp";
+import paws from "../images/paws.webp";
 
 interface UserData {
-  id: number;
-  first_name: string;
-  last_name?: string;
-  username?: string;
-  language_code: string;
-  is_premium?: boolean;
+  username: string;
+  points: number;
 }
 
 interface Task {
   label: string;
-  url: string;
   started: boolean;
   completed: boolean;
   points: number;
 }
 
-type TaskKey = "task1" | "task2" | "task3" | "task4" | "task5" | "task6" | "task7" | "task8" | "task9";
+type TaskKey = "task1" | "task2" | "task3" | "task4";
 
-export default function Home() {
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [tasks, setTasks] = useState<Record<TaskKey, Task>>({
-    task1: { label: "Be a good mi ma moncky (+50 DOGS)", url: "https://example1.com/task1", started: false, completed: false, points: 50 },
-    task2: { label: "Subscribe to DOGS channel (+100 DOGS)", url: "https://t.me/dogs_channel", started: false, completed: false, points: 100 },
-    task3: { label: "Subscribe to Dogs X.com (+1000 DOGS)", url: "https://www.dogsx.com", started: false, completed: false, points: 1000 },
-    task4: { label: "Invite 5 friends to DOGS (+20000 DOGS)", url: "https://example.com/task4", started: false, completed: false, points: 20000 },
-    task5: { label: "Send 🦴 to Binance X.com (+100 DOGS)", url: "https://www.binance.com", started: false, completed: false, points: 100 },
-    task6: { label: "Send 🦴 to OKX X.com (+100 DOGS)", url: "https://www.okx.com", started: false, completed: false, points: 100 },
-    task7: { label: "Send 🦴 to Bybit X.com (+100 DOGS)", url: "https://www.bybit.com", started: false, completed: false, points: 100 },
-    task8: { label: "moy", url: "https://www.okx.com", started: false, completed: false, points: 50 },
-    task9: { label: "ggood", url: "https://www.bybit.com", started: false, completed: false, points: 50 },
+export default function DogshousePage() {
+  const [userData, setUserData] = useState<UserData>({
+    username: "JohnDoe",
+    points: 100,
   });
-  const [points, setPoints] = useState(0);
-  const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    const storedUserData = localStorage.getItem("userData");
-    const storedTasks = localStorage.getItem("tasks");
-    const storedPoints = localStorage.getItem("points");
-
-    if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
-    }
-    if (storedTasks) {
-      setTasks(JSON.parse(storedTasks));
-    }
-    if (storedPoints) {
-      setPoints(Number(storedPoints));
-    }
-
-    if (WebApp.initDataUnsafe?.user) {
-      const user = WebApp.initDataUnsafe.user as UserData;
-      setUserData(user);
-      localStorage.setItem("userData", JSON.stringify(user));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (tasks) {
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
-  }, [tasks]);
-
-  useEffect(() => {
-    localStorage.setItem("points", points.toString());
-  }, [points]);
+  const [tasks, setTasks] = useState<Record<TaskKey, Task>>({
+    task1: { label: "Feed the Dog (+50 Points)", started: false, completed: false, points: 50 },
+    task2: { label: "Walk the Dog (+100 Points)", started: false, completed: false, points: 100 },
+    task3: { label: "Play with the Dog (+200 Points)", started: false, completed: false, points: 200 },
+    task4: { label: "Adopt a Dog (+500 Points)", started: false, completed: false, points: 500 },
+  });
 
   const handleTaskStart = (taskKey: TaskKey) => {
     setTasks((prevTasks) => ({
@@ -84,68 +43,113 @@ export default function Home() {
       ...prevTasks,
       [taskKey]: { ...prevTasks[taskKey], completed: true },
     }));
-    setPoints((prevPoints) => prevPoints + tasks[taskKey].points);
+    setUserData((prevData) => ({
+      ...prevData,
+      points: prevData.points + tasks[taskKey].points,
+    }));
   };
-
-  const copyReferralLink = () => {
-    if (userData) {
-      const referralLink = `https://t.me/monton_bot/ref${userData.id}`;
-      navigator.clipboard.writeText(referralLink).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      });
-    }
-  };
-
-  const activeTasks = Object.entries(tasks).filter(([_, task]) => !task.completed);
 
   return (
-    <main style={{ padding: "20px", backgroundColor: "#1f1f1f", color: "#fff", fontFamily: "Arial, sans-serif", minHeight: "100vh" }}>
-      {userData ? (
-        <>
-          <h1 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "20px" }}>Welcome, {userData.username}</h1>
-          <div style={{ padding: "20px", backgroundColor: "#333", borderRadius: "8px" }}>
-            <Image src={paws} alt="Paws" width={171} height={132} />
-          </div>
+    <div
+      style={{
+        backgroundColor: "#1f1f1f",
+        color: "#fff",
+        fontFamily: "Arial, sans-serif",
+        minHeight: "100vh",
+        padding: "16px",
+      }}
+    >
+      <header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "16px",
+          backgroundColor: "#333",
+          borderRadius: "8px",
+        }}
+      >
+        <h1 style={{ fontSize: "1.5rem" }}>Dogshouse Bot</h1>
+        <div>
+          <span style={{ fontSize: "1rem", marginRight: "10px" }}>
+            Points: <strong>{userData.points}</strong>
+          </span>
+          <Image src={paws} alt="Paws" width={40} height={40} />
+        </div>
+      </header>
 
-          <div style={{ padding: "20px", backgroundColor: "#444", borderRadius: "8px" }}>
-            <span style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Points: {points}</span>
+      <section style={{ marginTop: "20px" }}>
+        <h2 style={{ fontSize: "1.25rem", marginBottom: "16px" }}>Tasks</h2>
+        {Object.entries(tasks).map(([key, task]) => (
+          <div
+            key={key}
+            style={{
+              backgroundColor: "#444",
+              padding: "16px",
+              marginBottom: "10px",
+              borderRadius: "8px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <span>{task.label}</span>
+            {task.completed ? (
+              <button
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#4CAF50",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "4px",
+                }}
+              >
+                Completed
+              </button>
+            ) : task.started ? (
+              <button
+                onClick={() => handleTaskComplete(key as TaskKey)}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#007BFF",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "4px",
+                }}
+              >
+                Complete
+              </button>
+            ) : (
+              <button
+                onClick={() => handleTaskStart(key as TaskKey)}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#FFA500",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "4px",
+                }}
+              >
+                Start
+              </button>
+            )}
           </div>
+        ))}
+      </section>
 
-          <div style={{ margin: "10px 0" }}>
-            <button
-              onClick={copyReferralLink}
-              style={{ backgroundColor: "#4CAF50", color: "white", padding: "12px 24px", borderRadius: "4px", border: "none", fontSize: "1rem" }}
-            >
-              Invite Friends
-            </button>
-          </div>
-          {copied && <div style={{ color: "lime", marginTop: "5px" }}>Copied</div>}
-
-          {activeTasks.map(([key, task]) => (
-            <div key={key} style={{ marginBottom: "15px", padding: "12px", backgroundColor: "#555", borderRadius: "6px" }}>
-              <span>{task.label}</span>
-              {task.started ? (
-                <button
-                  onClick={() => handleTaskComplete(key as TaskKey)}
-                  style={{ marginLeft: "10px", padding: "8px 16px", backgroundColor: "#007BFF", color: "white", borderRadius: "4px" }}
-                >
-                  Check
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleTaskStart(key as TaskKey)}
-                  style={{ marginLeft: "10px", padding: "8px 16px", backgroundColor: "#FFA500", color: "white", borderRadius: "4px" }}
-                >
-                  Start
-                </button>
-              )}
-            </div>
-          ))}
-        </>
-      ) : (
-        <div>Loading...</div>
-      )}
-    </main>
+      <footer
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "#333",
+          padding: "16px",
+          textAlign: "center",
+        }}
+      >
+        <p style={{ margin: 0 }}>© 2025 Dogshouse Bot. All rights reserved.</p>
+      </footer>
+    </div>
   );
 }
