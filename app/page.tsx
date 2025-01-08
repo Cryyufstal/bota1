@@ -39,11 +39,15 @@ export default function Home() {
   });
   const [points, setPoints] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [showFriends, setShowFriends] = useState(false);
+  const [showTasks, setShowTasks] = useState(false);
+  const [invitedFriends, setInvitedFriends] = useState<string[]>([]);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
     const storedTasks = localStorage.getItem("tasks");
     const storedPoints = localStorage.getItem("points");
+    const storedInvitedFriends = localStorage.getItem("invitedFriends");
 
     if (storedUserData) {
       setUserData(JSON.parse(storedUserData));
@@ -54,6 +58,9 @@ export default function Home() {
     if (storedPoints) {
       setPoints(Number(storedPoints));
     }
+    if (storedInvitedFriends) {
+      setInvitedFriends(JSON.parse(storedInvitedFriends));
+    }
 
     if (WebApp.initDataUnsafe?.user) {
       const user = WebApp.initDataUnsafe.user as UserData;
@@ -63,14 +70,16 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (tasks) {
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
+    localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
   useEffect(() => {
     localStorage.setItem("points", points.toString());
   }, [points]);
+
+  useEffect(() => {
+    localStorage.setItem("invitedFriends", JSON.stringify(invitedFriends));
+  }, [invitedFriends]);
 
   const handleTaskStart = (taskKey: TaskKey) => {
     setTasks((prevTasks) => {
@@ -79,7 +88,6 @@ export default function Home() {
       return updatedTasks;
     });
 
-    // فتح الرابط في نافذة جديدة
     const taskUrl = tasks[taskKey].url;
     if (taskUrl) {
       window.open(taskUrl, "_blank");
@@ -104,6 +112,13 @@ export default function Home() {
     }
   };
 
+  const addFriend = () => {
+    const friendName = prompt("Enter friend's name:");
+    if (friendName) {
+      setInvitedFriends((prev) => [...prev, friendName]);
+    }
+  };
+
   const activeTasks = Object.entries(tasks).filter(([_, task]) => !task.completed);
 
   return (
@@ -119,36 +134,65 @@ export default function Home() {
             <span style={{ fontSize: "1.25rem", fontWeight: "bold" }}>Points: {points}</span>
           </div>
 
-          <div style={{ margin: "10px 0" }}>
+          <div style={{ margin: "10px 0", display: "flex", gap: "10px" }}>
             <button
-              onClick={copyReferralLink}
+              onClick={() => setShowFriends(!showFriends)}
               style={{ backgroundColor: "#4CAF50", color: "white", padding: "12px 24px", borderRadius: "4px", border: "none", fontSize: "1rem" }}
             >
               Invite Friends
             </button>
+            <button
+              onClick={() => setShowTasks(!showTasks)}
+              style={{ backgroundColor: "#007BFF", color: "white", padding: "12px 24px", borderRadius: "4px", border: "none", fontSize: "1rem" }}
+            >
+              Tasks
+            </button>
           </div>
           {copied && <div style={{ color: "lime", marginTop: "5px" }}>Copied</div>}
 
-          {activeTasks.map(([key, task]) => (
-            <div key={key} style={{ marginBottom: "15px", padding: "12px", backgroundColor: "#555", borderRadius: "6px" }}>
-              <span>{task.label}</span>
-              {task.started ? (
-                <button
-                  onClick={() => handleTaskComplete(key as TaskKey)}
-                  style={{ marginLeft: "10px", padding: "8px 16px", backgroundColor: "#007BFF", color: "white", borderRadius: "4px" }}
-                >
-                  Check
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleTaskStart(key as TaskKey)}
-                  style={{ marginLeft: "10px", padding: "8px 16px", backgroundColor: "#FFA500", color: "white", borderRadius: "4px" }}
-                >
-                  Start
-                </button>
-              )}
+          {showFriends && (
+            <div style={{ marginBottom: "15px", padding: "12px", backgroundColor: "#555", borderRadius: "6px" }}>
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "10px" }}>Invited Friends</h2>
+              <button
+                onClick={addFriend}
+                style={{ marginBottom: "10px", padding: "8px 16px", backgroundColor: "#FFA500", color: "white", borderRadius: "4px" }}
+              >
+                Add Friend
+              </button>
+              <ul>
+                {invitedFriends.map((friend, index) => (
+                  <li key={index} style={{ marginBottom: "5px" }}>
+                    {friend}
+                  </li>
+                ))}
+              </ul>
             </div>
-          ))}
+          )}
+
+          {showTasks && (
+            <div>
+              {activeTasks.map(([key, task]) => (
+                <div key={key} style={{ marginBottom: "15px", padding: "12px", backgroundColor: "#555", borderRadius: "6px" }}>
+                  <span>{task.label}</span>
+                  {task.started ? (
+                    <button
+                      onClick={() => handleTaskComplete(key as TaskKey)}
+                      style={{ marginLeft: "10px", padding: "8px 16px", backgroundColor: "#007BFF", color: "white", borderRadius: "4px" }}
+                    >
+                      Check
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleTaskStart(key as TaskKey)}
+                      style={{ marginLeft: "10px", padding: "8px 16px", backgroundColor: "#FFA500", color: "white", borderRadius: "4px" }}
+                    >
+                      Start
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </>
       ) : (
         <div>Loading...</div>
@@ -156,4 +200,3 @@ export default function Home() {
     </main>
   );
 }
-
