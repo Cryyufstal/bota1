@@ -161,8 +161,7 @@ export default function App() {
       )}
     </main>
   );
-            }import React, { useState } from "react";
-
+            }
 export default function App() {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteLink, setInviteLink] = useState("https://example.com/invite?ref=your_code");
