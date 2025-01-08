@@ -66,6 +66,13 @@ export default function Home() {
       const user = WebApp.initDataUnsafe.user as UserData;
       setUserData(user);
       localStorage.setItem("userData", JSON.stringify(user));
+
+      // تحقق من وجود رابط إحالة
+      const urlParams = new URLSearchParams(window.location.search);
+      const referrerId = urlParams.get("ref");
+      if (referrerId) {
+        handleReferral(referrerId);
+      }
     }
   }, []);
 
@@ -80,6 +87,22 @@ export default function Home() {
   useEffect(() => {
     localStorage.setItem("invitedFriends", JSON.stringify(invitedFriends));
   }, [invitedFriends]);
+
+  const handleReferral = (referrerId: string) => {
+    const referredUsers = JSON.parse(localStorage.getItem("referredUsers") || "{}");
+
+    if (!referredUsers[referrerId]?.includes(userData!.id)) {
+      if (!referredUsers[referrerId]) referredUsers[referrerId] = [];
+      referredUsers[referrerId].push(userData!.id);
+      localStorage.setItem("referredUsers", JSON.stringify(referredUsers));
+
+      const referrerPoints = parseInt(localStorage.getItem(`${referrerId}_points`) || "0", 10);
+      localStorage.setItem(`${referrerId}_points`, (referrerPoints + 10).toString());
+
+      // إضافة اسم المستخدم المدعو إلى قائمة الأصدقاء
+      setInvitedFriends((prev) => [...prev, userData!.username || `User ${userData!.id}`]);
+    }
+  };
 
   const handleTaskStart = (taskKey: TaskKey) => {
     setTasks((prevTasks) => {
@@ -104,18 +127,11 @@ export default function Home() {
 
   const copyReferralLink = () => {
     if (userData) {
-      const referralLink = `https://t.me/monton_bot/ref${userData.id}`;
+      const referralLink = `https://t.me/monton_bot?start=ref${userData.id}`;
       navigator.clipboard.writeText(referralLink).then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       });
-    }
-  };
-
-  const addFriend = () => {
-    const friendName = prompt("Enter friend's name:");
-    if (friendName) {
-      setInvitedFriends((prev) => [...prev, friendName]);
     }
   };
 
@@ -154,10 +170,10 @@ export default function Home() {
             <div style={{ marginBottom: "15px", padding: "12px", backgroundColor: "#555", borderRadius: "6px" }}>
               <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "10px" }}>Invited Friends</h2>
               <button
-                onClick={addFriend}
+                onClick={copyReferralLink}
                 style={{ marginBottom: "10px", padding: "8px 16px", backgroundColor: "#FFA500", color: "white", borderRadius: "4px" }}
               >
-                Add Friend
+                Copy Referral Link
               </button>
               <ul>
                 {invitedFriends.map((friend, index) => (
